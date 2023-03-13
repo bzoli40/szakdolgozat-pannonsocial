@@ -1,16 +1,12 @@
 const express = require('express');
 const cors = require('cors');
 
-const alkatreszRoute = require('./routes/alkatreszek')
-const rekeszRoute = require('./routes/rekeszek')
-const felhasznaloRoute = require('./routes/felhasznalok')
-const megrendelesRoute = require('./routes/megrendelesek')
-const anyagigenyRoute = require('./routes/anyagigenyek')
+const esemenyRoute = require('./routes/esemenyek')
 
 require('./database')
 
 const app = express();
-const port = 3000;
+const port = 3001;
 
 app.use(cors())
 
@@ -22,11 +18,7 @@ app.use((req, res, next) => {
     next();
 })
 
-app.use('/api/alkatreszek', alkatreszRoute);
-app.use('/api/rekeszek', rekeszRoute);
-app.use('/api/felhasznalok', felhasznaloRoute);
-app.use('/api/megrendelesek', megrendelesRoute);
-app.use('/api/anyagigenyek', anyagigenyRoute);
+app.use('/api/esemenyek', esemenyRoute);
 
 app.listen(port, () => {
     console.log(`Listening on ${port}...`);

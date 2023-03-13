@@ -5,12 +5,12 @@ const FelhasznaloSchema = new mongoose.Schema({
         type: mongoose.SchemaTypes.String,
         required: true
     },
-    felh_nev: {
+    email: {
         type: mongoose.SchemaTypes.String,
         required: true
     },
-    felh_tipus: {
-        type: mongoose.SchemaTypes.String,
+    jogok: {
+        type: mongoose.SchemaTypes.Map,
         required: true
     }
 }, { versionKey: false });
