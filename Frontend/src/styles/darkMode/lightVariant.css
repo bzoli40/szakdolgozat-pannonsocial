@@ -1,0 +1,27 @@
+:root {
+    --color-btn-auth: rgb(181, 77, 207);
+    --color-btn-auth-hover: rgb(157, 60, 182);
+
+    --color-darkmode-button: rgb(114, 108, 124);
+    --color-darkmode-hover: rgb(115, 93, 123);
+    --color-darkmode-icon: rgb(239, 239, 243);
+
+    --color-primal-button: rgb(211, 201, 228);
+    --color-primal-hover: rgb(236, 230, 247);
+
+    --color-A-light-1: #FFFBF5;
+    --color-A-light-2: #FFF9F2;
+    --color-A-light-3: #FFF7ED;
+    --color-A-light-4: #F7EFE5;
+
+    --color-A-1: #E6DFD5;
+    --color-A-2: #C2BDB4;
+
+    --color-A-dark-1: #96928C;
+    --color-A-dark-2: #5C5955;
+
+    --color-B-light-1: #A7AAD1;
+    --color-B-light-2: #B790D1;
+
+    --color-B-dark-1: #674188;
+}

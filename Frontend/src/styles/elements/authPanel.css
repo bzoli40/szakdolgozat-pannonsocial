@@ -1,0 +1,180 @@
+.shadow-background {
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+#auth-panel {
+    position: fixed;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+    background-color: white;
+    width: 380px;
+    height: 380px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0.2);
+    z-index: 601;
+
+    animation-name: fadeIn;
+    animation-duration: 0.5s;
+}
+
+.tbg {
+    background-color: aqua;
+}
+
+.panel-header {
+    font-size: 40px;
+    margin-top: 10px;
+}
+
+.panel-inputs {
+    margin: 20px 20px 20px 30px;
+}
+
+.input-label {
+    margin-right: 40px;
+}
+
+.text-input {
+    width: 100%;
+}
+
+.panel-inputs td {
+    text-align: left;
+    padding: 5px 0 5px 0;
+}
+
+td.alignCenter {
+    text-align: center;
+}
+
+.other-accounts-button {
+    width: 50px;
+    height: 50px;
+    border-radius: 5px;
+    margin: 0 5px;
+
+    animation-name: fadeIn;
+}
+
+/*    Google   */
+
+.google-icon {
+    border: solid 2px rgb(255, 0, 0);
+    background-color: rgb(255, 241, 241);
+    transition: all 0.2s;
+
+    animation-duration: 1s;
+}
+
+.google-icon:hover {
+    background-color: rgb(255, 0, 0);
+}
+
+.google-icon>.icon {
+    width: 25px;
+    height: 25px;
+    padding: 5px 0 0 0;
+    color: rgb(255, 0, 0);
+}
+
+.google-icon:hover>.icon {
+    color: rgb(255, 241, 241);
+}
+
+/*    Facebook   */
+
+.facebook-icon {
+    border: solid 2px rgb(0, 76, 255);
+    background-color: rgb(241, 241, 255);
+    transition: all 0.2s;
+
+    animation-duration: 1.5s;
+}
+
+.facebook-icon:hover {
+    background-color: rgb(0, 76, 255);
+}
+
+.facebook-icon>.icon {
+    width: 25px;
+    height: 25px;
+    padding: 5px 0 0 0;
+    color: rgb(0, 76, 255);
+}
+
+.facebook-icon:hover>.icon {
+    color: rgb(241, 241, 255);
+}
+
+/*   Microsoft   */
+
+.microsoft-icon {
+    border: solid 2px rgb(0, 204, 51);
+    background-color: rgb(241, 255, 241);
+    transition: all 0.2s;
+
+    animation-duration: 2s;
+}
+
+.microsoft-icon:hover {
+    background-color: rgb(0, 204, 51);
+}
+
+.microsoft-icon>.icon {
+    width: 25px;
+    height: 25px;
+    padding: 5px 0 0 0;
+    color: rgb(0, 204, 51);
+}
+
+.microsoft-icon:hover>.icon {
+    color: rgb(241, 255, 241);
+}
+
+.close-button {
+    right: 10px;
+    top: 7px;
+    position: fixed;
+    background-color: transparent;
+    border: 0;
+    font-size: 30px;
+}
+
+.auth-panel-divider {
+    border: solid;
+    margin: 5px 15px;
+    padding: 10px 0;
+    border-width: 1px 0 0 0;
+}
+
+.auth-action-button {
+    border-radius: 3px;
+    padding: 10px 30px;
+    margin-top: 10px;
+    font-size: 16px;
+    background-color: rgb(72, 72, 72);
+    border: 0;
+    color: white;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        top: 45%;
+    }
+
+    to {
+        opacity: 1;
+        top: 50%;
+    }
+}

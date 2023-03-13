@@ -1,0 +1,24 @@
+#contentPlace {
+    background-color: #d6c29e;
+    border: solid 1px black;
+    text-align: left;
+    margin: 10px;
+    border-radius: 10px;
+    padding: 7px 10px 0 10px;
+    color: inherit;
+    height: max-content;
+}
+
+#contentPlace p {
+    clear: both;
+    overflow: hidden;
+}
+
+#newsContent {
+    padding: 10px;
+}
+
+#newsTitle {
+    font-size: 30px;
+    font-style: italic;
+}

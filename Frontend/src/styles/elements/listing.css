@@ -1,0 +1,105 @@
+.cardHolder {
+    padding: 5px;
+    margin-bottom: 12px;
+}
+
+.cardHolder2 {
+    padding: 0;
+    margin-bottom: 4px;
+    opacity: 0;
+    visibility: hidden;
+    transition: visibility 0.4s ease-in-out, opacity 0.4s ease-in-out;
+}
+
+.show {
+    visibility: visible;
+    opacity: 1;
+}
+
+.list {
+    padding: 5px;
+}
+
+.listCard {
+    background-color: #dbb56f;
+    border-radius: 2px;
+    padding: 10px 10px;
+    box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.192);
+    cursor: pointer;
+}
+
+.lC-title {
+    overflow: hidden;
+    font-size: 21px;
+    height: 65px;
+    text-align: start;
+    text-overflow: ellipsis;
+    border-bottom: solid 2px #604718;
+}
+
+.lC-date {
+    text-align: end;
+    font-size: 15px;
+    font-style: italic;
+}
+
+.lC-icon {
+    width: 100%;
+    height: 200px;
+    margin-bottom: 10px;
+    border-radius: 7px;
+    overflow: hidden;
+}
+
+.lC-icon img {
+    max-width: 100%;
+    transform: translate(-50%, -50%);
+    border-radius: inherit;
+    position: relative;
+    left: 50%;
+    top: 50%;
+}
+
+.listCard-horizontal {
+    background-color: #fffcf2;
+    margin: 5px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.192);
+    cursor: pointer;
+    user-select: none;
+}
+
+.listCard-horizontal-card {
+    padding: 10px 0px;
+}
+
+.listCard-horizontal-collapsing {
+    padding: 0 18px;
+    background-color: #7efff9;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.2s ease-out;
+    border-radius: 0 0 5px 5px;
+}
+
+.lC-name {
+    overflow: hidden;
+    font-size: 25px;
+    text-align: end;
+    text-overflow: ellipsis;
+}
+
+.lC-date2 {
+    overflow: hidden;
+    font-size: 25px;
+    text-align: start;
+    text-overflow: ellipsis;
+    float: left;
+}
+
+.lC-icon2 {
+    size: 37px;
+    width: 37px;
+    float: left;
+    margin-right: 10px;
+}

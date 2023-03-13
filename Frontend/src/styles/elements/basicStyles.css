@@ -1,0 +1,8 @@
+.noDeco {
+    text-decoration: none;
+    color: inherit;
+}
+
+.noDeco:hover {
+    color: inherit;
+}

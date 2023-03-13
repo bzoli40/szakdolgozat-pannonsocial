@@ -1,0 +1,8 @@
+Használat:
+
+0: Kell!: Node.js / Git (bár ez nem 100%)
+1: Visual Studio Code-ban megnyitod a Backend mappát
+2: Megnyitod a console-t benne (Ctrl + ö)
+3: Beírod először, hogy 'npm install' vagy 'npm i'
+4: Miután befejezi a telepítést beírod, hogy 'npm start'
+5: PROFIT!

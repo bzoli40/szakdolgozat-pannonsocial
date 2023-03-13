@@ -1,0 +1,21 @@
+.editor-save-button,
+.editor-save-button:focus {
+    width: 200px;
+    height: 50px;
+    background-color: #e3cd7d;
+    position: relative;
+    transform: translateX(-50%);
+    left: 50%;
+    font-size: 30px;
+    padding: 0;
+    border-radius: 5px;
+    border: solid 1px #888578;
+    translate: all 0.3s;
+    color: #554602;
+}
+
+.editor-save-button:hover {
+    background-color: #f7d960;
+    border: solid 1px #6b685d;
+    color: #292206;
+}

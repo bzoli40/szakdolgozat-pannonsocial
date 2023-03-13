@@ -1,0 +1,11 @@
+[data-theme='dark'] {
+    --color-btn-auth: rgb(186, 114, 204);
+    --color-btn-auth-hover: rgb(210, 144, 227);
+
+    --color-darkmode-button: rgb(244, 244, 244);
+    --color-darkmode-hover: rgb(224, 208, 229);
+    --color-darkmode-icon: rgb(46, 43, 77);
+
+    --color-primal-button: rgb(211, 201, 228);
+    --color-primal-hover: rgb(236, 230, 247);
+}
