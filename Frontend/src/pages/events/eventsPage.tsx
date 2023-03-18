@@ -4,6 +4,7 @@ import { collection, doc, getDoc, getDocs, query, where, getFirestore, orderBy }
 import { initializeApp } from 'firebase/app';
 import NewsCard from '../../components/siteSpecific/NewsCard';
 import EventCard from '../../components/siteSpecific/EventCard';
+import axios from 'axios';
 
 //import "../../styles/elements/EventCard";
 
@@ -12,11 +13,25 @@ const EventsPage = () => {
     const lista = [1, 2, 3, 4, 5];
     const [events, setEvents] = useState([]);
 
+    const [eventGroups, setEventGroups] = useState([]);
+
     let params = new URLSearchParams(window.location.search);
 
     useEffect(() => {
-        getAllNews();
+        //getAllNews();
+        getAllNews2();
     }, [window.location.pathname, window.location.search])
+
+    const getAllNews2 = async () => {
+
+        await axios.get('http://localhost:3001/api/esemenyek/szures?idorend=true')
+            .then(response => {
+                setEvents(response.data)
+                //console.log(response.data)
+            })
+            .catch(error => console.log(error));
+
+    }
 
     const getAllNews = async () => {
 
@@ -51,17 +66,70 @@ const EventsPage = () => {
             }, delay);
             delay += delayPerElement;
         });
+    }, [eventGroups]);
+
+    useEffect(() => {
+
+        const honapNevek = ["január", "február", "március", "április", "május",
+            "június", "július", "augusztus", "szeptember", "október", "november",
+            "december"]
+
+        const temp = []
+
+        for (let x = 0; x < events.length; x++) {
+            const date = new Date(events[x].kezdes);
+            const year = date.getFullYear();
+            const month = honapNevek[date.getMonth()];
+
+            let found = false;
+
+            temp.forEach(element => {
+                if (element.year === year && element.month === month) {
+                    element.events.push(events[x]);
+                    found = true;
+                }
+            });
+
+            if (!found) {
+                temp.push({
+                    year,
+                    month,
+                    events: []
+                })
+                temp[temp.length - 1].events.push(events[x]);
+            }
+        }
+
+        console.log(temp)
+
+        setEventGroups(temp);
     }, [events]);
 
-    const renderBoxes = events.map((event) => {
+    const renderBoxes = (input) => input.map((event) => {
         return (
-            <EventCard eventObj={event} key={event.id} />
+            <EventCard eventObj={event} key={event._id} />
+        );
+    });
+
+    const renderGroupBoxes = eventGroups.map((group) => {
+        return (
+            <div className='events-month-group'>
+                <div className='events-month-name'>
+                    {group.year}. {group.month}
+                </div>
+                <div className='events-holder'>
+                    {renderBoxes(group.events)}
+                </div>
+            </div>
         );
     });
 
     return (
-        <div className='row list'>
-            {renderBoxes}
+        <div>
+            {/* <div className='events-holder'>
+                {renderBoxes(events)}
+            </div> */}
+            {renderGroupBoxes}
         </div>
     )
 }

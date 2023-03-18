@@ -36,8 +36,21 @@ const NewsPage = () => {
         setNews(temp);
     }
 
+    let delayPerElement = 100;
+
+    useEffect(() => {
+        const boxesElements = document.querySelectorAll(".cardHolder");
+        let delay = 300;
+        boxesElements.forEach((box) => {
+            setTimeout(() => {
+                box.classList.add('show');
+            }, delay);
+            delay += delayPerElement;
+        });
+    }, [news]);
+
     return (
-        <div className='row'>
+        <div id='news-holder'>
             {
                 news.map((hir) => <NewsCard newsObj={hir} key={hir.id} />)
             }

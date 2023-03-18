@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import party_icon from './../../images/icons/party.png';
 import university_icon from './../../images/icons/university.png';
 import basic_icon from './../../images/icons/basic.png';
+import holiday_icon from './../../images/icons/holiday.png';
 import { useAppDispatch } from '../../store';
 import { showToast } from '../../slices/toastSlice';
 
@@ -15,8 +16,9 @@ function EventCard({ eventObj }) {
 
     const dispatch = useAppDispatch();
 
-    const start_date = eventObj.start_date.toDate() as Date;
-    const end_date = eventObj.end_date.toDate() as Date;
+    const start_date = new Date(eventObj.kezdes);
+    const end_date = new Date(eventObj.vege);
+    const need_hour = eventObj.kellOra;
     const currentDate = new Date();
 
     const FormatPart = (input, toCharLength, fillupChar) => {
@@ -41,7 +43,10 @@ function EventCard({ eventObj }) {
         const isToday = AreDaysSame(date, currentDate)
 
         if (isToday)
-            return `${needDay ? 'Ma >' : ''} ${FormatPart(date.getHours(), 2, '0')}:${FormatPart(date.getMinutes(), 2, '0')}`
+            if (needHour)
+                return `${needDay ? 'Ma >' : ''} ${FormatPart(date.getHours(), 2, '0')}:${FormatPart(date.getMinutes(), 2, '0')}`
+            else
+                return `${needDay ? 'Ma' : ''}`
         else
             if (!needDay)
                 return `${FormatPart(date.getHours(), 2, '0')}:${FormatPart(date.getMinutes(), 2, '0')}`
@@ -52,13 +57,14 @@ function EventCard({ eventObj }) {
                 > ${FormatPart(date.getHours(), 2, '0')}:${FormatPart(date.getMinutes(), 2, '0')}`
     }
 
-    const FormatForCard = (start: Date, end: Date) => {
+    const FormatForCard = (start: Date, end: Date, hour: boolean) => {
+
         // Ha a két nap azonos és ma vannak
         if (AreDaysSame(start, end) && AreDaysSame(start, currentDate))
-            return FormatWithCurrentDate(start_date, true, true) + ' - ' + FormatWithCurrentDate(end_date, false, true)
+            return FormatWithCurrentDate(start_date, true, hour) + (need_hour ? (' - ' + FormatWithCurrentDate(end_date, false, true)) : '')
         // Ha a két nap azonos, de nem ma vannak
         if (AreDaysSame(start, end) && !AreDaysSame(start, currentDate))
-            return FormatWithCurrentDate(start_date, true, true) + ' - ' + FormatWithCurrentDate(end_date, false, true)
+            return FormatWithCurrentDate(start_date, true, hour) + (need_hour ? (' - ' + FormatWithCurrentDate(end_date, false, true)) : '')
         // Ha a két nap más, de az egyik ma van
         // Ha a két nap más és egyik se ma van
         else
@@ -67,10 +73,12 @@ function EventCard({ eventObj }) {
 
     const GetIcon = () => {
 
-        if (eventObj.event_type === 'szorakozas')
+        if (eventObj.tipus === 'szorakozas')
             return party_icon
-        else if (eventObj.event_type === 'egyetemi')
+        else if (eventObj.tipus === 'egyetemi')
             return university_icon
+        else if (eventObj.tipus === 'szunet')
+            return holiday_icon
         else
             return basic_icon
     }
@@ -85,8 +93,8 @@ function EventCard({ eventObj }) {
 
     const changeContentHeight = () => {
 
-        var content = document.getElementById('details_' + eventObj.id);
-        var card = document.getElementById('card_' + eventObj.id);
+        var content = document.getElementById('details_' + eventObj._id);
+        var card = document.getElementById('card_' + eventObj._id);
         var contents = document.querySelectorAll(".listCard-horizontal-collapsing");
 
         if (content.style.maxHeight) {
@@ -97,28 +105,26 @@ function EventCard({ eventObj }) {
                     (one as HTMLElement).style.maxHeight = null;
             });
             content.style.maxHeight = content.scrollHeight + "px";
-            dispatch(showToast({ type: "info", message: eventObj.name }));
+            //dispatch(showToast({ type: "info", message: eventObj.megnevezes }));
         }
     }
 
     return (
-        <div className='col-12 cardHolder2'>
+        <div className='cardHolder2'>
             {/* <Link to={"/esemenyek/" + eventObj.id} className="noDeco">
                 
             </Link> */}
-            <div className='listCard-horizontal' id={'card_' + eventObj.id} onClick={() => { changeContentHeight() }}>
-                <div className='row listCard-horizontal-card'>
-                    <div className='col-lg-6'>
-                        <img className='lC-icon2' src={GetIcon()}></img>
-                        <span className='lC-date2'>
-                            {FormatForCard(start_date, end_date)}
-                        </span>
-                    </div>
-                    <div className='col-lg-6 lC-name'>
-                        {eventObj.name}
-                    </div>
+            <div className='listCard-horizontal' id={'card_' + eventObj._id} onClick={() => { changeContentHeight() }}>
+                <div className='listCard-horizontal-card'>
+                    <img className='lC-icon2' src={GetIcon()}></img>
+                    <span className='lC-name'>
+                        {eventObj.megnevezes}
+                    </span>
+                    <span className='lC-date2'>
+                        {FormatForCard(start_date, end_date, need_hour)}
+                    </span>
                 </div>
-                <div className='listCard-horizontal-collapsing' id={'details_' + eventObj.id}>
+                <div className='listCard-horizontal-collapsing' id={'details_' + eventObj._id}>
                     yes
                 </div>
             </div>

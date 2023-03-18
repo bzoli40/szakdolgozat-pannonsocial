@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { solid, regular, brands } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { useAppDispatch } from '../store';
-import { setCredentials, setLogin, setLogout } from '../slices/authFireSlice';
+import { setCredentials, setLogin, setLogout, setRegisterEmailPassword } from '../slices/authFireSlice';
 import { useSelector } from 'react-redux';
 
 function AuthenticationPanel({ closeEvent }) {
@@ -15,8 +15,17 @@ function AuthenticationPanel({ closeEvent }) {
     const LoginWithEmailPassword = event => {
         event.preventDefault();
 
-        dispatch(setCredentials({ email: event.target.email.value, password: event.target.password.value }))
+        dispatch(setCredentials({ email: event.target.log_email.value, password: event.target.log_password.value }))
         dispatch(setLogin(true))
+    }
+
+    const RegisterWithEmailPassword = event => {
+        event.preventDefault();
+
+        console.log("A")
+
+        dispatch(setCredentials({ email: event.target.reg_email.value, password: event.target.reg_password.value, fullName: event.target.reg_fullName.value }))
+        dispatch(setRegisterEmailPassword(true))
     }
 
     const Logout = event => {
@@ -59,7 +68,7 @@ function AuthenticationPanel({ closeEvent }) {
                                                     <label className='input-label'>E-mail cím</label>
                                                 </td>
                                                 <td>
-                                                    <input name="email" type={"text"} className="form-control text-input" placeholder='valami@cim.hu' />
+                                                    <input name="log_email" type={"text"} className="form-control text-input" placeholder='valami@cim.hu' />
                                                 </td>
                                             </tr>
                                             <tr>
@@ -67,7 +76,7 @@ function AuthenticationPanel({ closeEvent }) {
                                                     <label className='input-label'>Jelszó</label>
                                                 </td>
                                                 <td>
-                                                    <input name="password" type={"password"} className="form-control text-input" placeholder='Jelszó' />
+                                                    <input name="log_password" type={"password"} className="form-control text-input" placeholder='Jelszó' />
                                                 </td>
                                             </tr>
                                             <tr>
@@ -80,7 +89,12 @@ function AuthenticationPanel({ closeEvent }) {
                                         </tbody>
                                     </table>
                                 </form>
-                                <p>
+                                <div className='auth-panel-divider'>
+                                    <p className='no-margin'>
+                                        Elfelejtett jelszó | <span className='clickable' onClick={() => { setMode("register") }}>Új fiók</span>
+                                    </p>
+                                </div>
+                                {/* <p>
                                     Elfelejtett jelszó | <span className='clickable' onClick={() => { setMode("register") }}>Új fiók</span>
                                 </p>
                                 <div className='auth-panel-divider'>
@@ -93,9 +107,54 @@ function AuthenticationPanel({ closeEvent }) {
                                     <button className='other-accounts-button microsoft-icon'>
                                         <FontAwesomeIcon icon={brands('microsoft')} className="icon" />
                                     </button>
-                                </div>
+                                </div> */}
                             </div>
-                            : []
+                            : mode === "register" ?
+                                <div>
+                                    <form onSubmit={RegisterWithEmailPassword}>
+                                        <table className='panel-inputs'>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <label className='input-label'>E-mail cím</label>
+                                                    </td>
+                                                    <td>
+                                                        <input name="reg_email" type={"text"} className="form-control text-input" placeholder='valami@cim.hu' />
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <label className='input-label'>Teljes név</label>
+                                                    </td>
+                                                    <td>
+                                                        <input name="reg_fullName" type={"text"} className="form-control text-input" placeholder='Teszt János' />
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <label className='input-label'>Jelszó</label>
+                                                    </td>
+                                                    <td>
+                                                        <input name="reg_password" type={"password"} className="form-control text-input" placeholder='Jelszó' />
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td colSpan={2} className="alignCenter">
+                                                        <button className='auth-action-button' type='submit'>
+                                                            REGISZTRÁCIÓ
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </form>
+                                    <div className='auth-panel-divider'>
+                                        <p className='no-margin'>
+                                            <span className='clickable' onClick={() => { setMode("login") }}>Már van fiókom</span>
+                                        </p>
+                                    </div>
+                                </div>
+                                : []
                 }
             </div>
         </div>

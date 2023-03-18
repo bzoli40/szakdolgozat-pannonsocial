@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { getCookie, setCookie } from '../utils/CookieFunctions';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { solid, regular, brands } from '@fortawesome/fontawesome-svg-core/import.macro'
-import { AnyAction } from 'redux';
+
+import night_mode from '../images/icons/night_mode.png';
+import day_mode from '../images/icons/day_mode.png';
 import { useAppDispatch, useAppSelector } from '../store';
 import { setDarkMode } from '../slices/darkModeSlice';
 import { useSelector } from 'react-redux';
@@ -44,7 +44,7 @@ function DarkModeSwitch() {
   return (
     <div className='z-500'>
       <button className='darkModeButton' onClick={() => dispatch(setDarkMode(!darkMode))}>
-        <FontAwesomeIcon icon={darkMode ? solid('sun') : solid('moon')} className={"darkModeIcon darkModeIconAnim-" + (darkMode ? "1" : "2")} />
+        <img src={darkMode ? day_mode : night_mode} className={"darkModeIcon darkModeIconAnim-" + (darkMode ? "1" : "2")} ></img>
       </button>
     </div>
   )

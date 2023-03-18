@@ -22,8 +22,6 @@ function MainLayout() {
                     <Outlet />
                 </div>
             </div>
-            <NotificationBell />
-            <DarkModeSwitch />
             <ProfileButton />
         </div>
     )

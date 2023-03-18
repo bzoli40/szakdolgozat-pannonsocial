@@ -27,7 +27,7 @@ function NewsCard({ newsObj }) {
     }
 
     return (
-        <div className='col-lg-3 col-12 cardHolder'>
+        <div className='cardHolder'>
             <Link to={"/hirek/" + newsObj.creationID} className="noDeco">
                 <div className='listCard'>
                     <div className='lC-icon'>

@@ -16,11 +16,10 @@
     transform: translate(-50%, -50%);
     left: 50%;
     top: 50%;
-    background-color: white;
+    background-color: var(--color-A-light-2);
     width: 380px;
     height: 380px;
     border-radius: 10px;
-    box-shadow: 0 0 10px 10px rgba(0, 0, 0, 0.2);
     z-index: 601;
 
     animation-name: fadeIn;
@@ -34,6 +33,7 @@
 .panel-header {
     font-size: 40px;
     margin-top: 10px;
+    color: var(--color-B-dark-2);
 }
 
 .panel-inputs {
@@ -42,6 +42,7 @@
 
 .input-label {
     margin-right: 40px;
+    color: var(--color-A-dark-2);
 }
 
 .text-input {
@@ -151,6 +152,9 @@ td.alignCenter {
 }
 
 .auth-panel-divider {
+    position: absolute;
+    bottom: 0px;
+    width: calc(100% - 30px);
     border: solid;
     margin: 5px 15px;
     padding: 10px 0;
@@ -162,9 +166,9 @@ td.alignCenter {
     padding: 10px 30px;
     margin-top: 10px;
     font-size: 16px;
-    background-color: rgb(72, 72, 72);
+    background-color: var(--color-A-dark-2);
     border: 0;
-    color: white;
+    color: var(--color-A-light-1);
 }
 
 @keyframes fadeIn {

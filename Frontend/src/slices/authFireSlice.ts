@@ -5,12 +5,13 @@ export const authFireSlice = createSlice({
     initialState: {
         //userLogged: { UserImpl: {} },
         wantLogin: false,
-        wantRegisterEmailPassword: false,
+        wantRegister: false,
         wantPasswordReset: false,
         wantLogout: false,
         credentials: {
             email: "",
-            password: ""
+            password: "",
+            fullName: ""
         },
         userLogged: {
             displayName: ""
@@ -29,14 +30,13 @@ export const authFireSlice = createSlice({
             state.wantLogout = action.payload
         },
         setRegisterEmailPassword: (state, action) => {
-            state.wantRegisterEmailPassword = action.payload
+            state.wantRegister = action.payload
         },
         setPasswordReset: (state, action) => {
             state.wantPasswordReset = action.payload
         },
         setUserDisplayName: (state, action) => {
             state.userLogged.displayName = action.payload
-            console.log(action.payload)
         },
         setLoggedIn: (state, action) => {
             state.loggedIn = action.payload

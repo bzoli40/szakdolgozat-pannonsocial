@@ -21,39 +21,39 @@ function PageTitle() {
                 case "/hirek":
                     switch (params.get("type")) {
                         case "egyetemi":
-                            title = "Egyetemi hírek";
+                            title = "Hírek ➜ Egyetemi";
                             break;
                         case "kari":
-                            title = "Kari hírek";
+                            title = "Hírek ➜ Kari";
                             break;
                         case "pehok":
-                            title = "PEHÖK hírek";
+                            title = "Hírek ➜ PEHÖK";
                             break;
                         case "kollegiumi":
-                            title = "Kollégiumi hírek";
+                            title = "Hírek ➜ Kollégiumi";
                             break;
                         case "surgos":
-                            title = "Sűrgős hírek";
+                            title = "Hírek ➜ Sűrgős";
                             break;
                     }
                     break;
                 case "/szerkeszto":
-                    title = "Szerkesztő"
+                    title = "Szerkesztő ➜ Új hír létrehozása"
                     break;
                 case "/esemenyek":
-                    title = "Események"
+                    title = "Események ➜ Naptár"
                     break;
             }
         }
         else if (subSiteSliced.length == 3) {
             switch (subSiteSliced[1]) {
                 case "hirek":
-                    title = "Hír megtekintése"
+                    title = "Hírek ➜ Hír megtekintése"
                     break;
                 case "szerkeszto":
                     switch (subSiteSliced[2]) {
                         case "hir":
-                            title = "Hírszerkesztő"
+                            title = "Szerkesztő ➜ Hírszerkesztő"
                             break;
                     }
                     break;

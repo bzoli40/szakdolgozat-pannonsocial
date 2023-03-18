@@ -16,6 +16,21 @@ router.get('/', async (req, res) => {
 
 });
 
+router.get('/szures', async (req, res) => {
+
+    const { skip, limit, idorend } = req.query;
+
+    try {
+        let esemeny_lista = await Esemenyek.find().sort(idorend == 'true' ? { kezdes: 1 } : {}).limit(limit > 0 ? limit : 100).skip(skip > 0 ? skip : 0);
+
+        res.status(200).send(esemeny_lista)
+    }
+    catch (error) {
+        res.send({ msg: error })
+    }
+
+});
+
 router.get('/:esemenyID', async (req, res) => {
 
     const { esemenyID } = req.params;

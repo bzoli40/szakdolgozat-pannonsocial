@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { solid, regular, brands } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { useAppDispatch } from '../store';
 import { useSelector } from 'react-redux';
-import { setCloseMsg, setCredentials, setLoggedIn, setLogin, setLogout, setUserDisplayName } from '../slices/authFireSlice';
+import { setCloseMsg, setCredentials, setLoggedIn, setLogin, setLogout, setRegisterEmailPassword, setUserDisplayName } from '../slices/authFireSlice';
 import { showToast } from '../slices/toastSlice';
 
 const firebaseConfig = {
@@ -23,14 +23,14 @@ const firebaseConfig = {
 function FireBase() {
 
     const dispatch = useAppDispatch();
-    const { wantLogin, credentials, wantLogout } = useSelector((state: any) => state.authFire);
+    const { wantLogin, credentials, wantLogout, wantRegister } = useSelector((state: any) => state.authFire);
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app)
 
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            console.log(auth.currentUser.email)
+            //console.log(auth.currentUser.email)
 
             dispatch(setLoggedIn(true))
 
@@ -43,13 +43,29 @@ function FireBase() {
     const [email, setEmail] = useState("");
     const [psw, setPsw] = useState("");
 
-    const createNewUser = (email, psw) => {
+    const registerUser = (email, psw, fullName) => {
         createUserWithEmailAndPassword(auth, email, psw)
             .then((userCredential) => {
                 const user = userCredential.user;
                 console.log(`[FIREBASE]`)
                 console.log(user)
-                dispatch(setLoggedIn(true))
+
+                dispatch(setCloseMsg(true))
+
+                updateProfile(user, {
+                    displayName: fullName
+                }).then(() => {
+
+                    console.log(user.displayName)
+
+                    dispatch(setLoggedIn(true))
+
+                }).catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+
+                    console.log(`[${errorCode}] ${errorMessage}`)
+                });
             })
             .catch((error) => {
                 const errorCode = error.code;
@@ -100,6 +116,16 @@ function FireBase() {
             dispatch(setCredentials({ email: "", password: "" }))
         }
     }, [wantLogin])
+
+    useEffect(() => {
+        if (wantRegister) {
+
+            registerUser(credentials.email, credentials.password, credentials.fullName)
+
+            dispatch(setRegisterEmailPassword(false))
+            dispatch(setCredentials({ email: "", password: "", fullName: "" }))
+        }
+    }, [wantRegister])
 
     useEffect(() => {
         if (wantLogout) {

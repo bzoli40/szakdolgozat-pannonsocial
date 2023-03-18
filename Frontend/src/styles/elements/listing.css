@@ -1,6 +1,23 @@
+#news-holder {
+    display: grid;
+    grid-template-columns: min-content min-content min-content min-content min-content;
+    grid-gap: 20px;
+    padding: 40px;
+}
+
+.events-holder {
+    display: grid;
+    grid-template-columns: 800px 800px;
+    grid-gap: 15px;
+    padding: 10px 0 10px 25px;
+}
+
 .cardHolder {
-    padding: 5px;
-    margin-bottom: 12px;
+    width: 300px;
+    height: 340px;
+    opacity: 0;
+    visibility: hidden;
+    transition: visibility 0.4s ease-in-out, opacity 0.4s ease-in-out;
 }
 
 .cardHolder2 {
@@ -21,61 +38,67 @@
 }
 
 .listCard {
-    background-color: #dbb56f;
-    border-radius: 2px;
-    padding: 10px 10px;
-    box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.192);
+    background-color: var(--color-A-light-4);
+    border: solid 1px var(--color-A-2);
+    padding: 10px 10px 5px 10px;
     cursor: pointer;
+    height: 100%;
 }
 
 .lC-title {
     overflow: hidden;
-    font-size: 21px;
-    height: 65px;
+    font-size: 20px;
+    font-weight: 500;
+    height: 70px;
     text-align: start;
     text-overflow: ellipsis;
-    border-bottom: solid 2px #604718;
+    color: var(--color-B-dark-1);
+    border-top: solid 2px var(--color-A-2);
+    padding-top: 10px;
+    margin-bottom: 10px;
 }
 
 .lC-date {
     text-align: end;
-    font-size: 15px;
-    font-style: italic;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--color-A-dark-1);
 }
 
 .lC-icon {
     width: 100%;
-    height: 200px;
+    height: 210px;
     margin-bottom: 10px;
-    border-radius: 7px;
+    border: 2px solid var(--color-A-1);
     overflow: hidden;
 }
 
 .lC-icon img {
-    max-width: 100%;
+    max-height: 100%;
     transform: translate(-50%, -50%);
-    border-radius: inherit;
     position: relative;
     left: 50%;
     top: 50%;
 }
 
 .listCard-horizontal {
-    background-color: #fffcf2;
-    margin: 5px;
+    background-color: var(--color-A-light-4);
+    border: 1px solid var(--color-A-2);
+    margin: 0px;
     border-radius: 5px;
-    box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.192);
     cursor: pointer;
     user-select: none;
 }
 
 .listCard-horizontal-card {
-    padding: 10px 0px;
+    padding: 7.5px 10px;
+    height: 60px;
 }
 
 .listCard-horizontal-collapsing {
     padding: 0 18px;
-    background-color: #7efff9;
+    background-color: var(--color-A-light-4);
+    color: var(--color-A-dark-2);
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.2s ease-out;
@@ -85,21 +108,50 @@
 .lC-name {
     overflow: hidden;
     font-size: 25px;
-    text-align: end;
     text-overflow: ellipsis;
+    float: left;
+    margin-top: 4px;
+    color: var(--color-A-dark-2);
 }
 
 .lC-date2 {
     overflow: hidden;
     font-size: 25px;
+    margin-top: 4px;
     text-align: start;
     text-overflow: ellipsis;
-    float: left;
+    float: right;
+    color: var(--color-A-dark-2);
 }
 
 .lC-icon2 {
-    size: 37px;
-    width: 37px;
+    size: 45px;
+    width: 45px;
     float: left;
     margin-right: 10px;
+}
+
+.events-month-name {
+    color: var(--color-B-dark-1);
+    font-size: 30px;
+    font-weight: 500;
+    overflow: hidden;
+}
+
+.events-month-group {
+    margin: 20px 10px 0 15px;
+    text-align: start;
+    position: relative;
+}
+
+.events-month-name::after {
+    content: "";
+    display: inline-block;
+    height: 0.5em;
+    vertical-align: bottom;
+    width: 100%;
+    margin-right: -100%;
+    margin-left: 15px;
+    margin-bottom: 6px;
+    border-top: 2px solid var(--color-A-2);
 }

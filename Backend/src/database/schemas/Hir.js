@@ -33,10 +33,6 @@ const HirSchema = new mongoose.Schema({
         type: mongoose.SchemaTypes.String,
         required: true
     },
-    tagek: [{
-        type: mongoose.SchemaTypes.String,
-        required: true
-    }],
     lathato: {
         type: mongoose.SchemaTypes.Boolean,
         required: true
