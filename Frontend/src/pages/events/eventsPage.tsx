@@ -58,13 +58,28 @@ const EventsPage = () => {
     let delayPerElement = 150;
 
     useEffect(() => {
+        const groupElements = document.querySelectorAll(".events-month-group");
         const boxesElements = document.querySelectorAll(".cardHolder2");
+
         let delay = 500;
-        boxesElements.forEach((box) => {
+        let delay2 = delay + 100;
+
+        groupElements.forEach((box) => {
+
+            const latency = box.childNodes[1].childNodes.length * delayPerElement;
+
             setTimeout(() => {
                 box.classList.add('show');
             }, delay);
-            delay += delayPerElement;
+
+            delay += delayPerElement + latency;
+        });
+
+        boxesElements.forEach((box) => {
+            setTimeout(() => {
+                box.classList.add('show');
+            }, delay2);
+            delay2 += delayPerElement;
         });
     }, [eventGroups]);
 
@@ -113,7 +128,7 @@ const EventsPage = () => {
 
     const renderGroupBoxes = eventGroups.map((group) => {
         return (
-            <div className='events-month-group'>
+            <div className='events-month-group' key={group.year + "." + group.month}>
                 <div className='events-month-name'>
                     {group.year}. {group.month}
                 </div>
