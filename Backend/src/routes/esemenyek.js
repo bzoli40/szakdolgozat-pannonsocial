@@ -53,7 +53,7 @@ router.get('/:esemenyID', async (req, res) => {
 
 router.post('/', async (req, res) => {
 
-    const { megnevezes, tipus, kezdes, vege, oraKell } = req.body;
+    const { megnevezes, tipus, kezdes, vege, oraKell, leiras, helyszin } = req.body;
 
     try {
 
@@ -65,7 +65,9 @@ router.post('/', async (req, res) => {
             tipus: tipus,
             kezdes: kezdesDatum,
             vege: vegeDatum,
-            oraKell: oraKell
+            oraKell: oraKell,
+            helyszin: helyszin,
+            leiras: leiras
         })
 
         res.status(200).send(ujEsemeny)

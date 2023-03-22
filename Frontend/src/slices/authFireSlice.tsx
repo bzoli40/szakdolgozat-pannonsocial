@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 
 export const authFireSlice = createSlice({
     name: 'authFire',
@@ -14,7 +15,8 @@ export const authFireSlice = createSlice({
             fullName: ""
         },
         userLogged: {
-            displayName: ""
+            displayName: "",
+            permissions: {}
         },
         loggedIn: false,
         msg_closeAuthPanel: false
@@ -41,11 +43,14 @@ export const authFireSlice = createSlice({
         setLoggedIn: (state, action) => {
             state.loggedIn = action.payload
         },
+        setPermissions: (state, action) => {
+            state.userLogged.permissions = action.payload
+        },
         setCloseMsg: (state, action) => {
             state.msg_closeAuthPanel = action.payload
         }
     }
 });
 
-export const { setLogin, setRegisterEmailPassword, setPasswordReset, setCredentials, setUserDisplayName, setLoggedIn, setCloseMsg, setLogout } = authFireSlice.actions;
+export const { setLogin, setRegisterEmailPassword, setPasswordReset, setCredentials, setUserDisplayName, setLoggedIn, setCloseMsg, setLogout, setPermissions } = authFireSlice.actions;
 export default authFireSlice.reducer;

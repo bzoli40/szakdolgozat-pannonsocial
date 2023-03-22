@@ -1,0 +1,52 @@
+#event-inspection-panel {
+    position: fixed;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%;
+    background-color: var(--color-A-light-3);
+    width: 700px;
+    height: 800px;
+    border-radius: 15px;
+    z-index: 601;
+    text-align: start;
+
+    animation-name: fadeUp;
+    animation-duration: 0.5s;
+}
+
+.panel-header {
+    font-size: 40px;
+    font-weight: 500;
+    margin: 40px 20px 20px 20px;
+    padding-bottom: 15px;
+    color: var(--color-B-dark-1);
+    overflow: hidden;
+    border-bottom: 2px solid var(--color-A-dark-2);
+}
+
+.panel-text-info {
+    font-size: 22.5px;
+    margin: 0px 20px;
+    color: var(--color-A-dark-1);
+    overflow: hidden;
+}
+
+.panel-text-detail {
+    color: var(--color-A-dark-2);
+    font-size: 27.5px;
+    margin: 0px 20px;
+    margin-top: 20px;
+}
+
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        top: 53%;
+    }
+
+    to {
+        opacity: 1;
+        top: 50%;
+    }
+}

@@ -7,8 +7,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { solid, regular, brands } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { useAppDispatch } from '../store';
 import { useSelector } from 'react-redux';
-import { setCloseMsg, setCredentials, setLoggedIn, setLogin, setLogout, setRegisterEmailPassword, setUserDisplayName } from '../slices/authFireSlice';
+import { setCloseMsg, setCredentials, setLoggedIn, setLogin, setLogout, setPermissions, setRegisterEmailPassword, setUserDisplayName } from '../slices/authFireSlice';
 import { showToast } from '../slices/toastSlice';
+import axios from 'axios';
 
 const firebaseConfig = {
     apiKey: "AIzaSyASX6TiMjBBts7sPi-w_8L9136_OF-c-Dg",
@@ -30,13 +31,28 @@ function FireBase() {
 
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            //console.log(auth.currentUser.email)
-
             dispatch(setLoggedIn(true))
-
             dispatch(setUserDisplayName(auth.currentUser.displayName))
         }
     });
+
+    useEffect(() => {
+
+        const uid = auth.currentUser?.uid
+
+        if (uid !== "" && uid !== undefined) {
+            axios.get(`http://localhost:3001/api/felhasznalok/${uid}/jogok`)
+                .then(response => {
+                    dispatch(setPermissions(response.data))
+                    console.log(response.data)
+                })
+                .catch(error => console.log(error));
+        }
+        else {
+            dispatch(setPermissions({}))
+        }
+
+    }, [auth.currentUser, window.location.pathname, window.location.search])
 
     const user = auth.currentUser;
 
@@ -50,15 +66,24 @@ function FireBase() {
                 console.log(`[FIREBASE]`)
                 console.log(user)
 
-                dispatch(setCloseMsg(true))
-
                 updateProfile(user, {
                     displayName: fullName
                 }).then(() => {
 
-                    console.log(user.displayName)
+                    axios.post('http://localhost:3001/api/felhasznalok/',
+                        {
+                            teljes_nev: fullName,
+                            email: email,
+                            idFireBase: user.uid
+                        })
+                        .then(response => {
 
-                    dispatch(setLoggedIn(true))
+                            dispatch(setLoggedIn(true))
+                            dispatch(setCloseMsg(true))
+                            dispatch(setUserDisplayName(user.displayName))
+                            dispatch(showToast({ type: "success", message: "Sikeres regisztráció" }))
+                        })
+                        .catch(error => console.log(error));
 
                 }).catch((error) => {
                     const errorCode = error.code;

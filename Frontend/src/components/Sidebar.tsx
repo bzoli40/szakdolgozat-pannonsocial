@@ -6,8 +6,11 @@ import { Link } from 'react-router-dom';
 import pp_icon from './../images/icons/pe_social.png';
 import NotificationBell from './NotificationBell';
 import DarkModeSwitch from './DarkModeSwitch';
+import { useSelector } from 'react-redux';
 
 function Sidebar() {
+
+    const { userLogged } = useSelector((state: any) => state.authFire);
 
     const [currentSite, setCurrentSite] = useState('');
 
@@ -122,20 +125,26 @@ function Sidebar() {
                         </li>
                     </ul>
                 </div>
-                <div className='sidebar-category-panel'>
-                    <p className='sidebar-menu-category'>
-                        Eszközök
-                    </p>
-                    <ul className='sidebar-menu-pages'>
-                        <li>
-                            <Link to="/szerkeszto">
-                                <button className={'sidebar-page-button ' + (currentSite === 'szerkeszto' ? 'selected' : '')}>
-                                    Szerkesztő
-                                </button>
-                            </Link>
-                        </li>
-                    </ul>
-                </div>
+                {
+                    userLogged.permissions?.news_create ?
+
+                        <div className='sidebar-category-panel'>
+                            <p className='sidebar-menu-category'>
+                                Eszközök
+                            </p>
+                            <ul className='sidebar-menu-pages'>
+                                <li>
+                                    <Link to="/szerkeszto">
+                                        <button className={'sidebar-page-button ' + (currentSite === 'szerkeszto' ? 'selected' : '')}>
+                                            Szerkesztő
+                                        </button>
+                                    </Link>
+                                </li>
+                            </ul>
+                        </div>
+
+                        : []
+                }
             </div>
             <NotificationBell />
             <DarkModeSwitch />

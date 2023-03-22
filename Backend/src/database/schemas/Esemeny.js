@@ -9,6 +9,9 @@ const EsemenySchema = new mongoose.Schema({
         type: mongoose.SchemaTypes.String,
         required: true
     },
+    leiras: {
+        type: mongoose.SchemaTypes.String
+    },
     kezdes: {
         type: mongoose.SchemaTypes.Date,
         required: true
@@ -16,6 +19,9 @@ const EsemenySchema = new mongoose.Schema({
     vege: {
         type: mongoose.SchemaTypes.Date,
         required: true
+    },
+    helyszin: {
+        type: mongoose.SchemaTypes.String
     },
     oraKell: {
         type: mongoose.SchemaTypes.Boolean,

@@ -12,6 +12,18 @@ const FelhasznaloSchema = new mongoose.Schema({
     jogok: {
         type: mongoose.SchemaTypes.Map,
         required: true
+    },
+    idFireBase: {
+        type: mongoose.SchemaTypes.String,
+        required: true
+    },
+    szervezet: {
+        type: mongoose.SchemaTypes.String
+    },
+    torolt: {
+        type: mongoose.SchemaTypes.Boolean,
+        required: true,
+        default: false
     }
 }, { versionKey: false });
 

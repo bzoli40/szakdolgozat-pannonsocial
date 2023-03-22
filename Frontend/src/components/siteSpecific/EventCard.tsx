@@ -10,6 +10,7 @@ import basic_icon from './../../images/icons/basic.png';
 import holiday_icon from './../../images/icons/holiday.png';
 import { useAppDispatch } from '../../store';
 import { showToast } from '../../slices/toastSlice';
+import { FormatForCard } from '../../utils/DateFormatting';
 
 
 function EventCard({ eventObj }) {
@@ -20,56 +21,6 @@ function EventCard({ eventObj }) {
     const end_date = new Date(eventObj.vege);
     const need_hour = eventObj.kellOra;
     const currentDate = new Date();
-
-    const FormatPart = (input, toCharLength, fillupChar) => {
-
-        var charDifference = toCharLength - input.toString().length;
-        var bonus = "";
-
-        for (let x = 0; x < charDifference; x++)
-            bonus += fillupChar;
-
-        return bonus + input + "";
-
-    }
-
-    const AreDaysSame = (dateA: Date, dateB: Date) => {
-        return dateA.getFullYear() === dateB.getFullYear()
-            && dateA.getMonth() === dateB.getMonth()
-            && dateA.getDate() === dateB.getDate();
-    }
-
-    const FormatWithCurrentDate = (date: Date, needDay: boolean, needHour: boolean) => {
-        const isToday = AreDaysSame(date, currentDate)
-
-        if (isToday)
-            if (needHour)
-                return `${needDay ? 'Ma >' : ''} ${FormatPart(date.getHours(), 2, '0')}:${FormatPart(date.getMinutes(), 2, '0')}`
-            else
-                return `${needDay ? 'Ma' : ''}`
-        else
-            if (!needDay)
-                return `${FormatPart(date.getHours(), 2, '0')}:${FormatPart(date.getMinutes(), 2, '0')}`
-            else if (!needHour)
-                return `${date.getFullYear()}.${FormatPart(date.getMonth() + 1, 2, '0')}.${FormatPart(date.getDate(), 2, '0')}`
-            else
-                return `${date.getFullYear()}.${FormatPart(date.getMonth() + 1, 2, '0')}.${FormatPart(date.getDate(), 2, '0')} 
-                > ${FormatPart(date.getHours(), 2, '0')}:${FormatPart(date.getMinutes(), 2, '0')}`
-    }
-
-    const FormatForCard = (start: Date, end: Date, hour: boolean) => {
-
-        // Ha a két nap azonos és ma vannak
-        if (AreDaysSame(start, end) && AreDaysSame(start, currentDate))
-            return FormatWithCurrentDate(start_date, true, hour) + (need_hour ? (' - ' + FormatWithCurrentDate(end_date, false, true)) : '')
-        // Ha a két nap azonos, de nem ma vannak
-        if (AreDaysSame(start, end) && !AreDaysSame(start, currentDate))
-            return FormatWithCurrentDate(start_date, true, hour) + (need_hour ? (' - ' + FormatWithCurrentDate(end_date, false, true)) : '')
-        // Ha a két nap más, de az egyik ma van
-        // Ha a két nap más és egyik se ma van
-        else
-            return FormatWithCurrentDate(start_date, true, false) + ' - ' + FormatWithCurrentDate(end_date, true, false)
-    }
 
     const GetIcon = () => {
 
@@ -114,19 +65,19 @@ function EventCard({ eventObj }) {
             {/* <Link to={"/esemenyek/" + eventObj.id} className="noDeco">
                 
             </Link> */}
-            <div className='listCard-horizontal' id={'card_' + eventObj._id} onClick={() => { changeContentHeight() }}>
+            <div className='listCard-horizontal' id={'card_' + eventObj._id} onClick={() => { }}>
                 <div className='listCard-horizontal-card'>
                     <img className='lC-icon2' src={GetIcon()}></img>
                     <span className='lC-name'>
                         {eventObj.megnevezes}
                     </span>
                     <span className='lC-date2'>
-                        {FormatForCard(start_date, end_date, need_hour)}
+                        {FormatForCard(start_date, end_date, currentDate, need_hour)}
                     </span>
                 </div>
-                <div className='listCard-horizontal-collapsing' id={'details_' + eventObj._id}>
+                {/* <div className='listCard-horizontal-collapsing' id={'details_' + eventObj._id}>
                     yes
-                </div>
+                </div> */}
             </div>
         </div>
     )

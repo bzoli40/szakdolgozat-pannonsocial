@@ -34,6 +34,9 @@
     font-size: 40px;
     margin-top: 10px;
     color: var(--color-B-dark-2);
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .panel-inputs {

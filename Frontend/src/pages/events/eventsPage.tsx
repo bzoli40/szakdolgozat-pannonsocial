@@ -5,6 +5,7 @@ import { initializeApp } from 'firebase/app';
 import NewsCard from '../../components/siteSpecific/NewsCard';
 import EventCard from '../../components/siteSpecific/EventCard';
 import axios from 'axios';
+import { FormatForCard } from '../../utils/DateFormatting';
 
 //import "../../styles/elements/EventCard";
 
@@ -14,6 +15,16 @@ const EventsPage = () => {
     const [events, setEvents] = useState([]);
 
     const [eventGroups, setEventGroups] = useState([]);
+    const [panelVisible, setPanelVisible] = useState(false);
+
+    const [showingEvent, setShowingEvent] = useState({
+        megnevezes: "",
+        kezdes: new Date(),
+        vege: new Date(),
+        oraKell: false,
+        helyszin: "",
+        leiras: ""
+    })
 
     let params = new URLSearchParams(window.location.search);
 
@@ -115,14 +126,24 @@ const EventsPage = () => {
             }
         }
 
-        console.log(temp)
+        //console.log(temp)
 
         setEventGroups(temp);
     }, [events]);
 
+    const showEventDetails = (eventObj) => {
+        setShowingEvent(eventObj)
+
+        console.log(eventObj.kezdes)
+
+        setPanelVisible(true)
+    }
+
     const renderBoxes = (input) => input.map((event) => {
         return (
-            <EventCard eventObj={event} key={event._id} />
+            <div onClick={() => showEventDetails(event)} key={event._id}>
+                <EventCard eventObj={event} />
+            </div>
         );
     });
 
@@ -139,12 +160,38 @@ const EventsPage = () => {
         );
     });
 
+    const onClickButton = (isTrue) => {
+        setPanelVisible(isTrue)
+    }
+
     return (
         <div>
             {/* <div className='events-holder'>
                 {renderBoxes(events)}
             </div> */}
             {renderGroupBoxes}
+            {
+                panelVisible ?
+                    <div>
+                        <div className='shadow-background z-600' onClick={() => { onClickButton(false) }}>
+                        </div>
+                        <div id='event-inspection-panel'>
+                            <button className='close-button' onClick={() => { onClickButton(false) }}>✖</button>
+                            <p className='panel-header'>
+                                {showingEvent?.megnevezes}
+                            </p>
+                            <p className='panel-text-info'>
+                                Időpont: {FormatForCard(new Date(showingEvent.kezdes), new Date(showingEvent.vege), new Date(), showingEvent.oraKell)}
+                            </p>
+                            <p className='panel-text-info'>
+                                Helyszín: {showingEvent?.helyszin}
+                            </p>
+                            <p className='panel-text-detail'>
+                                {showingEvent?.leiras}
+                            </p>
+                        </div>
+                    </div> : []
+            }
         </div>
     )
 }

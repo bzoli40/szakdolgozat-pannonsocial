@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 
 const esemenyRoute = require('./routes/esemenyek')
+const felhasznaloRoute = require('./routes/felhasznalok')
 
 require('./database')
 
@@ -19,6 +20,7 @@ app.use((req, res, next) => {
 })
 
 app.use('/api/esemenyek', esemenyRoute);
+app.use('/api/felhasznalok', felhasznaloRoute);
 
 app.listen(port, () => {
     console.log(`Listening on ${port}...`);
