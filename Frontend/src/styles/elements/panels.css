@@ -14,7 +14,17 @@
     animation-duration: 0.5s;
 }
 
-.panel-header {
+.close-button {
+    right: 10px;
+    top: 7px;
+    position: fixed;
+    background-color: transparent;
+    color: var(--color-A-dark-2);
+    border: 0;
+    font-size: 30px;
+}
+
+.panel-header.underlined {
     font-size: 40px;
     font-weight: 500;
     margin: 40px 20px 20px 20px;
@@ -36,6 +46,15 @@
     font-size: 27.5px;
     margin: 0px 20px;
     margin-top: 20px;
+}
+
+.panel-bottom-divider {
+    position: absolute;
+    bottom: 10px;
+    width: calc(100% - 30px);
+    margin: 5px 15px;
+    padding: 10px 0;
+    text-align: center;
 }
 
 

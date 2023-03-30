@@ -46,6 +46,21 @@ router.get('/:firebaseID/jogok', async (req, res) => {
 
 });
 
+router.get('/:firebaseID/kovetett_esemenyek', async (req, res) => {
+
+    const { firebaseID } = req.params;
+
+    try {
+        const felhasznalo = await Felhasznalok.findOne({ idFireBase: firebaseID });
+
+        res.status(200).send(felhasznalo.kovetett_esemenyek)
+    }
+    catch (error) {
+        res.send({ msg: error })
+    }
+
+});
+
 router.post('/', async (req, res) => {
 
     const { teljes_nev, email, idFireBase, szervezet } = req.body;
@@ -97,6 +112,43 @@ router.put('/:firebaseID/jogmodositas', async (req, res) => {
         await felhasznalo.save();
 
         res.status(200).send(felhasznalo.jogok)
+    }
+    catch (error) {
+        res.send({ msg: error })
+    }
+})
+
+router.put('/:firebaseID/esemeny/:esemenyID', async (req, res) => {
+    const { firebaseID, esemenyID } = req.params;
+    const { kovetni } = req.query
+
+    try {
+
+        const kovetniBool = kovetni == "true"
+
+        // Felhasználó
+        let felhasznalo = await Felhasznalok.findOne({ idFireBase: firebaseID });
+
+        const felh_kovetesek = felhasznalo.kovetett_esemenyek;
+
+        // Megnézzük, hogy nem-e ellentmondó a backend parancs (pl. követte és követni akarja)
+        if (felh_kovetesek.includes(esemenyID) && kovetniBool) {
+            res.status(400).send({ msg: "HIBA: Ezt az eseményt már követed" })
+            return;
+        }
+        else if (!felh_kovetesek.includes(esemenyID) && !kovetniBool) {
+            res.status(400).send({ msg: "HIBA: Ezt az eseményt nem követted" })
+        }
+        else {
+            if (kovetniBool)
+                await Felhasznalok.updateOne({ idFireBase: firebaseID }, { $push: { kovetett_esemenyek: esemenyID } })
+            else
+                await Felhasznalok.updateOne({ idFireBase: firebaseID }, { $pull: { kovetett_esemenyek: esemenyID } })
+        }
+
+        felhasznalo = await Felhasznalok.findOne({ idFireBase: firebaseID });
+
+        res.status(200).send({ msg: kovetniBool ? "Követed az eseményt!" : "Kikövetted az eseményt!", data: felhasznalo.kovetett_esemenyek })
     }
     catch (error) {
         res.send({ msg: error })

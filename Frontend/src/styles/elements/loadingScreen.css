@@ -1,0 +1,25 @@
+:root {
+    --load-size: 200px
+}
+
+.loading {
+    position: relative;
+    left: calc(50% - (calc(var(--load-size) / 2)));
+    top: calc(50% - (calc(var(--load-size) / 2)));
+    border: 15px solid var(--color-A-light-4);
+    border-top: 15px solid var(--color-B-dark-1);
+    border-radius: 50%;
+    width: var(--load-size);
+    height: var(--load-size);
+    animation: spin 1.5s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}

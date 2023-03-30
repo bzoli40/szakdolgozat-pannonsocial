@@ -7,9 +7,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { solid, regular, brands } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { useAppDispatch } from '../store';
 import { useSelector } from 'react-redux';
-import { setCloseMsg, setCredentials, setLoggedIn, setLogin, setLogout, setPermissions, setRegisterEmailPassword, setUserDisplayName } from '../slices/authFireSlice';
+import { setCloseMsg, setCredentials, setFirebaseID, setLoggedIn, setLogin, setLogout, setPermissions, setRegisterEmailPassword, setUserDisplayName } from '../slices/authFireSlice';
 import { showToast } from '../slices/toastSlice';
 import axios from 'axios';
+import { setLoad } from '../slices/loadingSlice';
 
 const firebaseConfig = {
     apiKey: "AIzaSyASX6TiMjBBts7sPi-w_8L9136_OF-c-Dg",
@@ -41,6 +42,9 @@ function FireBase() {
         const uid = auth.currentUser?.uid
 
         if (uid !== "" && uid !== undefined) {
+
+            dispatch(setFirebaseID(uid));
+
             axios.get(`http://localhost:3001/api/felhasznalok/${uid}/jogok`)
                 .then(response => {
                     dispatch(setPermissions(response.data))
@@ -49,6 +53,7 @@ function FireBase() {
                 .catch(error => console.log(error));
         }
         else {
+            dispatch(setFirebaseID(""));
             dispatch(setPermissions({}))
         }
 
@@ -101,6 +106,9 @@ function FireBase() {
     }
 
     const loginToUser = (email, psw) => {
+
+        dispatch(setLoad(true));
+
         signInWithEmailAndPassword(auth, email, psw)
             .then((userCredential) => {
                 const user = userCredential.user;
@@ -108,6 +116,7 @@ function FireBase() {
                 dispatch(showToast({ type: "success", message: "Sikeres bejelentkezés" }))
                 dispatch(setLoggedIn(true))
                 dispatch(setCloseMsg(true))
+                dispatch(setLoad(false));
                 console.log(user)
             })
             .catch((error) => {
@@ -119,12 +128,16 @@ function FireBase() {
     }
 
     const logOut = () => {
+
+        dispatch(setLoad(true));
+        dispatch(setCloseMsg(true))
+
         signOut(auth).then(() => {
             // Sign-out successful.
             console.log("Successful logout")
             dispatch(setUserDisplayName(""))
             dispatch(setLoggedIn(false))
-            dispatch(setCloseMsg(true))
+            dispatch(setLoad(false));
             dispatch(showToast({ type: "success", message: "Sikeres kijelentkezés" }))
         }).catch((error) => {
             // An error happened.

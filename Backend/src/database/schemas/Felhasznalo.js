@@ -20,6 +20,16 @@ const FelhasznaloSchema = new mongoose.Schema({
     szervezet: {
         type: mongoose.SchemaTypes.String
     },
+    kovetett_esemenyek: [{
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'hir',
+        default: []
+    }],
+    kovetett_hirtipusok: [{
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'esemeny',
+        default: []
+    }],
     torolt: {
         type: mongoose.SchemaTypes.Boolean,
         required: true,

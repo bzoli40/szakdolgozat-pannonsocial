@@ -16,6 +16,7 @@ export const authFireSlice = createSlice({
         },
         userLogged: {
             displayName: "",
+            firebaseID: "",
             permissions: {}
         },
         loggedIn: false,
@@ -46,11 +47,14 @@ export const authFireSlice = createSlice({
         setPermissions: (state, action) => {
             state.userLogged.permissions = action.payload
         },
+        setFirebaseID: (state, action) => {
+            state.userLogged.firebaseID = action.payload
+        },
         setCloseMsg: (state, action) => {
             state.msg_closeAuthPanel = action.payload
         }
     }
 });
 
-export const { setLogin, setRegisterEmailPassword, setPasswordReset, setCredentials, setUserDisplayName, setLoggedIn, setCloseMsg, setLogout, setPermissions } = authFireSlice.actions;
+export const { setLogin, setRegisterEmailPassword, setPasswordReset, setCredentials, setUserDisplayName, setLoggedIn, setCloseMsg, setLogout, setPermissions, setFirebaseID } = authFireSlice.actions;
 export default authFireSlice.reducer;

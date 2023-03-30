@@ -158,3 +158,30 @@
     visibility: visible;
     opacity: 1;
 }
+
+.filter-holder {
+    text-align: start;
+    margin: 20px 20px;
+}
+
+.filter-button {
+    background-color: var(--color-A-light-4);
+    border: 1px solid var(--color-A-2);
+    border-radius: 15px;
+    height: 32px;
+    font-size: 20px;
+    color: var(--color-A-dark-2);
+    padding: 0 20px;
+}
+
+.filter-button:hover {
+    background-color: var(--color-A-light-3);
+}
+
+.filter-button:active {
+    background-color: var(--color-A-1);
+}
+
+.filter-button:disabled {
+    background-color: var(--color-A-2);
+}

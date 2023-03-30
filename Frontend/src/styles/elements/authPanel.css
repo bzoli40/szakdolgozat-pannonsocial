@@ -145,15 +145,6 @@ td.alignCenter {
     color: rgb(241, 255, 241);
 }
 
-.close-button {
-    right: 10px;
-    top: 7px;
-    position: fixed;
-    background-color: transparent;
-    border: 0;
-    font-size: 30px;
-}
-
 .auth-panel-divider {
     position: absolute;
     bottom: 0px;

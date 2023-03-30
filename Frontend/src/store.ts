@@ -3,13 +3,15 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import darkModeReducer from "./slices/darkModeSlice";
 import authFireReducer from "./slices/authFireSlice";
 import toastReducer from "./slices/toastSlice";
+import loadingReducer from "./slices/loadingSlice";
 import thunk from "redux-thunk";
 
 export const store = configureStore({
     reducer: {
         darkMode: darkModeReducer,
         authFire: authFireReducer,
-        toast: toastReducer
+        toast: toastReducer,
+        loading: loadingReducer
     },
 });
 

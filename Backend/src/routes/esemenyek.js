@@ -2,6 +2,7 @@ const { Router, response } = require('express');
 const router = Router();
 
 const Esemenyek = require('../database/schemas/Esemeny');
+const Felhasznalok = require('../database/schemas/Felhasznalo');
 
 router.get('/', async (req, res) => {
 
@@ -18,10 +19,20 @@ router.get('/', async (req, res) => {
 
 router.get('/szures', async (req, res) => {
 
-    const { skip, limit, idorend } = req.query;
+    const { skip, limit, idorend, koveto } = req.query;
 
     try {
-        let esemeny_lista = await Esemenyek.find().sort(idorend == 'true' ? { kezdes: 1 } : {}).limit(limit > 0 ? limit : 100).skip(skip > 0 ? skip : 0);
+        let esemeny_lista = []
+
+        if (koveto != undefined) {
+
+            const felhasznalo = await Felhasznalok.findOne({ idFireBase: koveto });
+            const kovetesek = felhasznalo.kovetett_esemenyek;
+
+            esemeny_lista = await Esemenyek.find({ _id: { $in: kovetesek } }).sort(idorend == 'true' ? { kezdes: 1 } : {}).limit(limit > 0 ? limit : 100).skip(skip > 0 ? skip : 0);
+        }
+        else
+            esemeny_lista = await Esemenyek.find().sort(idorend == 'true' ? { kezdes: 1 } : {}).limit(limit > 0 ? limit : 100).skip(skip > 0 ? skip : 0);
 
         res.status(200).send(esemeny_lista)
     }

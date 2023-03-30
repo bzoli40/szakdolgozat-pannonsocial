@@ -9,6 +9,7 @@ import { useRoutes } from 'react-router-dom';
 import routes from './routes';
 import FireBase from './components/FireBase';
 import ToastSystem from './components/ToastSystem';
+import LoadingScreen from './components/LoadingScreen';
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
     <div className="App" data-theme={darkMode ? 'dark' : 'light'}>
       <FireBase />
       <ToastSystem />
+      <LoadingScreen />
       {routing}
     </div>
   );

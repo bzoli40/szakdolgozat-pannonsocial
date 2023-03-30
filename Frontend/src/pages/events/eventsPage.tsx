@@ -6,16 +6,25 @@ import NewsCard from '../../components/siteSpecific/NewsCard';
 import EventCard from '../../components/siteSpecific/EventCard';
 import axios from 'axios';
 import { FormatForCard } from '../../utils/DateFormatting';
+import { useSelector } from 'react-redux';
+import { showToast } from '../../slices/toastSlice';
+import { useAppDispatch } from '../../store';
 
 //import "../../styles/elements/EventCard";
 
 const EventsPage = () => {
 
+    const dispatch = useAppDispatch();
+    const { userLogged, loggedIn } = useSelector((state: any) => state.authFire);
+
     const lista = [1, 2, 3, 4, 5];
     const [events, setEvents] = useState([]);
+    const [followedEvents, setFollowedEvents] = useState([]);
 
     const [eventGroups, setEventGroups] = useState([]);
     const [panelVisible, setPanelVisible] = useState(false);
+
+    const [onlyFollowedEvents, setOnlyFollowedEvents] = useState(false);
 
     const [showingEvent, setShowingEvent] = useState({
         megnevezes: "",
@@ -23,25 +32,46 @@ const EventsPage = () => {
         vege: new Date(),
         oraKell: false,
         helyszin: "",
-        leiras: ""
+        leiras: "",
+        _id: ""
     })
 
     let params = new URLSearchParams(window.location.search);
 
     useEffect(() => {
-        //getAllNews();
-        getAllNews2();
-    }, [window.location.pathname, window.location.search])
+        setOnlyFollowedEvents(false);
 
-    const getAllNews2 = async () => {
+    }, [loggedIn, userLogged.firebaseID, window.location.pathname, window.location.search])
 
-        await axios.get('http://localhost:3001/api/esemenyek/szures?idorend=true')
+    useEffect(() => {
+        getAllEvents();
+    }, [onlyFollowedEvents])
+
+    const getAllEvents = async () => {
+
+        const loggedUserFirebaseID = userLogged.firebaseID;
+        const szuresPlusz = loggedUserFirebaseID !== "" && onlyFollowedEvents ? `&koveto=${loggedUserFirebaseID}` : ""
+
+        await axios.get('http://localhost:3001/api/esemenyek/szures?idorend=true' + szuresPlusz)
             .then(response => {
                 setEvents(response.data)
-                //console.log(response.data)
+                getFollowedEvents();
             })
             .catch(error => console.log(error));
+    }
 
+    const getFollowedEvents = async () => {
+
+        const loggedUserFirebaseID = userLogged.firebaseID;
+
+        if (loggedUserFirebaseID !== "") {
+            await axios.get(`http://localhost:3001/api/felhasznalok/${loggedUserFirebaseID}/kovetett_esemenyek`)
+                .then(response => {
+                    setFollowedEvents(response.data)
+                    console.log(response.data)
+                })
+                .catch(error => console.log(error));
+        }
     }
 
     const getAllNews = async () => {
@@ -72,8 +102,8 @@ const EventsPage = () => {
         const groupElements = document.querySelectorAll(".events-month-group");
         const boxesElements = document.querySelectorAll(".cardHolder2");
 
-        let delay = 500;
-        let delay2 = delay + 100;
+        let delay = 100;
+        let delay2 = delay + 50;
 
         groupElements.forEach((box) => {
 
@@ -164,11 +194,38 @@ const EventsPage = () => {
         setPanelVisible(isTrue)
     }
 
+    const onClickEventFilter = () => {
+        if (loggedIn)
+            setOnlyFollowedEvents(!onlyFollowedEvents)
+    }
+
+    const onClickFollow = async (isTrue) => {
+
+        const loggedUserFirebaseID = userLogged.firebaseID;
+
+        if (loggedUserFirebaseID !== "") {
+            await axios.put(`http://localhost:3001/api/felhasznalok/${loggedUserFirebaseID}/esemeny/${showingEvent._id}?kovetni=${isTrue}`)
+                .then(response => {
+                    dispatch(showToast({ type: "success", message: response.data.msg }))
+                    setFollowedEvents(response.data.data)
+                    setPanelVisible(false)
+                    console.log(response.data.data)
+                })
+                .catch(error => console.log(error));
+        }
+    }
+
     return (
         <div>
-            {/* <div className='events-holder'>
-                {renderBoxes(events)}
-            </div> */}
+            <div className='filter-holder'>
+                <button className='filter-button' onClick={onClickEventFilter} disabled={!loggedIn}>
+                    {
+                        onlyFollowedEvents && loggedIn ?
+                            "Csak követett események"
+                            : "Minden esemény"
+                    }
+                </button>
+            </div>
             {renderGroupBoxes}
             {
                 panelVisible ?
@@ -177,18 +234,35 @@ const EventsPage = () => {
                         </div>
                         <div id='event-inspection-panel'>
                             <button className='close-button' onClick={() => { onClickButton(false) }}>✖</button>
-                            <p className='panel-header'>
+                            <p className='panel-header underlined'>
                                 {showingEvent?.megnevezes}
                             </p>
                             <p className='panel-text-info'>
                                 Időpont: {FormatForCard(new Date(showingEvent.kezdes), new Date(showingEvent.vege), new Date(), showingEvent.oraKell)}
                             </p>
                             <p className='panel-text-info'>
-                                Helyszín: {showingEvent?.helyszin}
+                                {
+                                    showingEvent?.helyszin ?
+                                        "Helyszín: " + (showingEvent?.helyszin)
+                                        : []
+                                }
                             </p>
                             <p className='panel-text-detail'>
                                 {showingEvent?.leiras}
                             </p>
+                            <div className='panel-bottom-divider'>
+                                {
+                                    loggedIn ?
+                                        <button className='filter-button' onClick={() => { onClickFollow(!followedEvents.includes(showingEvent._id)) }}>
+                                            {
+                                                !followedEvents.includes(showingEvent._id) ?
+                                                    "Követés"
+                                                    : "Kikövetés"
+                                            }
+                                        </button>
+                                        : []
+                                }
+                            </div>
                         </div>
                     </div> : []
             }
