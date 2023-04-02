@@ -6,8 +6,12 @@ const HirSchema = new mongoose.Schema({
         required: true
     },
     iro: {
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: 'felhasznalo'
+        type: mongoose.SchemaTypes.String,
+        required: true
+    },
+    iro_szervezete: {
+        type: mongoose.SchemaTypes.String,
+        default: ''
     },
     letrehozva: {
         type: mongoose.SchemaTypes.Date,
@@ -25,18 +29,18 @@ const HirSchema = new mongoose.Schema({
         type: mongoose.SchemaTypes.String,
         required: true
     },
-    fejlecKep: {
-        type: mongoose.SchemaTypes.String,
-        required: true
-    },
-    listaKep: {
+    listaKepURL: {
         type: mongoose.SchemaTypes.String,
         required: true
     },
     lathato: {
         type: mongoose.SchemaTypes.Boolean,
         required: true
-    }
+    },
+    hozzakotott_esemeny: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'esemeny'
+    },
 }, { versionKey: false });
 
 module.exports = mongoose.model('hir', HirSchema, 'hirek')

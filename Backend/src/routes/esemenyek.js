@@ -42,6 +42,20 @@ router.get('/szures', async (req, res) => {
 
 });
 
+router.get('/szures-hirhez', async (req, res) => {
+
+    const { kifejezes } = req.query;
+
+    try {
+        const talalatok = await Esemenyek.find({ megnevezes: { $regex: new RegExp(kifejezes, 'i') } }).select('megnevezes kezdes')
+        res.status(200).send(talalatok)
+    }
+    catch (error) {
+        res.send({ msg: error })
+    }
+
+});
+
 router.get('/:esemenyID', async (req, res) => {
 
     const { esemenyID } = req.params;
@@ -72,13 +86,13 @@ router.post('/', async (req, res) => {
         const vegeDatum = new Date(vege);
 
         const ujEsemeny = await Esemenyek.create({
-            megnevezes: megnevezes,
-            tipus: tipus,
+            megnevezes,
+            tipus,
             kezdes: kezdesDatum,
             vege: vegeDatum,
-            oraKell: oraKell,
-            helyszin: helyszin,
-            leiras: leiras
+            oraKell,
+            helyszin,
+            leiras
         })
 
         res.status(200).send(ujEsemeny)

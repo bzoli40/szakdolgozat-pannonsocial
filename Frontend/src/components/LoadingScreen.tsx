@@ -4,7 +4,6 @@ import { useAppDispatch } from '../store';
 
 function LoadingScreen() {
 
-    const dispatch = useAppDispatch();
     const { load } = useSelector((state: any) => state.loading);
 
     return (

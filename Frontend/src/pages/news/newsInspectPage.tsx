@@ -3,17 +3,37 @@ import { collection, doc, getDoc, getDocs, query, where, getFirestore } from 'fi
 import { Editor } from '@tinymce/tinymce-react';
 import { blob } from 'stream/consumers';
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import axios from 'axios';
+import { OneDayFormatWithTodayCheck } from '../../utils/DateFormatting';
 
 function NewsInspectPage() {
 
-    const [hir, hirBeallit] = useState({
-        title: "",
-        creationDate: "",
-        content: ""
-    });
+    const [hir, hirBeallit] = useState({});
 
     let sitePath = window.location.pathname;
     let newsID = sitePath.split('/')[2];
+
+    const getNews2 = async () => {
+        await axios.get(`http://localhost:3001/api/hirek/${newsID}`)
+            .then(async response => {
+
+                let hirAxios = response.data;
+
+                if (hirAxios.iro_szervezete === '') {
+                    await axios.get(`http://localhost:3001/api/felhasznalok/firebase/${hirAxios.iro}`)
+                        .then(response => {
+                            hirAxios = ({ ...hirAxios, szerzo: response.data.teljes_nev })
+                        })
+                        .catch(error => console.log(error));
+                }
+
+                //console.log(hirAxios)
+
+                hirBeallit({ ...hir, ...hirAxios })
+            })
+            .catch(error => console.log(error));
+    }
+
 
     const getNews = async () => {
 
@@ -28,23 +48,27 @@ function NewsInspectPage() {
             content: hirObject.get("content")
         };
 
-        hirBeallit(temp);
+        //hirBeallit(temp);
     }
 
     useEffect(() => {
-        getNews()
+        getNews2()
     }, [])
 
     useEffect(() => {
-        document.getElementById('newsContent').innerHTML = hir.content
+        document.getElementById('newsContent').innerHTML = hir['tartalom']
     }, [hir])
 
     return (
-        <div id='contentPlace'>
-            <div id="newsTitle">
-                {hir.title}
+        <div>
+            <div id='newsInfos'>
+                <div id='creator'>
+                    Szerző: {hir['iro_szervezete'] !== '' ? hir['iro_szervezete'] : hir['szerzo']}
+                </div>
+                <div id='date'>
+                    Megjelent: {OneDayFormatWithTodayCheck(new Date(hir['letrehozva']))}
+                </div>
             </div>
-            <div className='line-horizontal' />
             <div id='newsContent' />
         </div>
     )

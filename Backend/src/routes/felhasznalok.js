@@ -31,6 +31,21 @@ router.get('/:felhasznaloID', async (req, res) => {
 
 });
 
+router.get('/firebase/:firebaseID', async (req, res) => {
+
+    const { firebaseID } = req.params;
+
+    try {
+        let felhasznalo = await Felhasznalok.findOne({ idFireBase: firebaseID });
+
+        res.status(200).send(felhasznalo)
+    }
+    catch (error) {
+        res.send({ msg: error })
+    }
+
+});
+
 router.get('/:firebaseID/jogok', async (req, res) => {
 
     const { firebaseID } = req.params;

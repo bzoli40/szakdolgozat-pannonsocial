@@ -1,4 +1,4 @@
-import HomeLayout from "./layouts/homeLayout"
+import ErrorLayout from "./layouts/errorLayout"
 import MainLayout from "./layouts/mainLayout"
 import NewsEditorPage from "./pages/editors/newsEditorPage"
 import EventsPage from "./pages/events/eventsPage"
@@ -11,8 +11,12 @@ const routes = () => [
         path: '/',
         element: <MainLayout />,
         children: [
-            { path: '', element: <StarterPage /> }
+            { path: '', element: <StarterPage /> },
         ]
+    },
+    {
+        path: 'hiba/',
+        element: <ErrorLayout />
     },
     {
         path: 'hirek/',

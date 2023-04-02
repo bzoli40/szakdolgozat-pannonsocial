@@ -10,7 +10,7 @@ import '../styles/elements/toastifyModifies.css'
 function NotificationSystem() {
     return (
         <div>
-            <ToastContainer autoClose={3000} />
+            <ToastContainer autoClose={1500} />
         </div>
     )
 }

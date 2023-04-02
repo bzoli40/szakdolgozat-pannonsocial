@@ -1,6 +1,20 @@
 import "../App.css";
 
-const FormatPart = (input, toCharLength, fillupChar) => {
+const isToday = (inputDate: Date) => {
+
+    const currentDate = new Date();
+
+    return inputDate.getFullYear() === currentDate.getFullYear()
+        && inputDate.getMonth() === currentDate.getMonth()
+        && inputDate.getDate() === currentDate.getDate();
+}
+
+export const OneDayFormatWithTodayCheck = (inputDate: Date) => {
+    return (isToday(inputDate) ? `Ma - ${FormatPart(inputDate.getHours(), 2, '0')}:${FormatPart(inputDate.getMinutes(), 2, '0')}`
+        : `${inputDate.getFullYear()}.${FormatPart(inputDate.getMonth() + 1, 2, '0')}.${FormatPart(inputDate.getDate(), 2, '0')}`)
+}
+
+export const FormatPart = (input, toCharLength, fillupChar) => {
 
     var charDifference = toCharLength - input.toString().length;
     var bonus = "";

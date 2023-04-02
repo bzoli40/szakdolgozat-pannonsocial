@@ -115,6 +115,8 @@ export const replaceHungarianCharsPlus = (text: string) => {
     textNew = textNew.replaceAll('á', 'a')
     textNew = textNew.replaceAll('í', 'i')
     textNew = textNew.replaceAll('?', '')
+    textNew = textNew.replaceAll('/', '')
+    textNew = textNew.replaceAll(':', '')
 
     return textNew;
 }

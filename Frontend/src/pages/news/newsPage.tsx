@@ -3,6 +3,7 @@ import FireBase from '../../components/FireBase'
 import { collection, doc, getDoc, getDocs, query, where, getFirestore } from 'firebase/firestore'
 import { initializeApp } from 'firebase/app';
 import NewsCard from '../../components/siteSpecific/NewsCard';
+import axios from 'axios';
 
 const NewsPage = () => {
 
@@ -12,8 +13,17 @@ const NewsPage = () => {
     let params = new URLSearchParams(window.location.search);
 
     useEffect(() => {
-        getAllNews();
+        getAllNews2();
     }, [window.location.pathname, window.location.search])
+
+    const getAllNews2 = async () => {
+
+        await axios.get('http://localhost:3001/api/hirek/')
+            .then(response => {
+                setNews(response.data)
+            })
+            .catch(error => console.log(error));
+    }
 
     const getAllNews = async () => {
 
@@ -52,7 +62,7 @@ const NewsPage = () => {
     return (
         <div id='news-holder'>
             {
-                news.map((hir) => <NewsCard newsObj={hir} key={hir.id} />)
+                news.map((hir) => <NewsCard newsObj={hir} key={hir._id} />)
             }
         </div>
     )

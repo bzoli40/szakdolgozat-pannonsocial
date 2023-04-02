@@ -5,25 +5,22 @@ import PageTitle from '../components/PageTitle'
 import ProfileButton from '../components/ProfileButton'
 import Sidebar from '../components/Sidebar'
 
-function HomeLayout() {
+function ErrorLayout() {
 
     return (
         <div>
-            <div id='content-full'>
-                <div id='header'>
-                    <p id='header-title'>
-                        {<PageTitle />}
-                    </p>
-                </div>
+            <Sidebar />
+            <div id='content'>
                 <div id='page_content'>
-                    <Outlet />
+                    <div className='centered'>
+                        Nincs jogosultságod az oldalhoz!
+                    </div>
                 </div>
             </div>
-            <DarkModeSwitch />
             <ProfileButton />
         </div>
     )
 
 }
 
-export default HomeLayout
+export default ErrorLayout

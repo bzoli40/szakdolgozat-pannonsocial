@@ -1,6 +1,11 @@
+import axios from 'axios';
 import React, { useEffect, useState } from 'react'
+import { useAppDispatch } from '../store';
+import { setLoad } from '../slices/loadingSlice';
 
 function PageTitle() {
+
+    const dispatch = useAppDispatch();
 
     let params = new URLSearchParams(window.location.search);
     let subSite = window.location.pathname;
@@ -8,6 +13,11 @@ function PageTitle() {
     const [siteTitle, setSiteTitle] = useState("");
 
     useEffect(() => {
+        dispatch(setLoad(true));
+        titleFromURL();
+    }, [window.location.pathname, window.location.search])
+
+    const titleFromURL = async () => {
         var title = "";
 
         var subSiteSliced = subSite.split('/');
@@ -32,9 +42,6 @@ function PageTitle() {
                         case "kollegiumi":
                             title = "Hírek ➜ Kollégiumi";
                             break;
-                        case "surgos":
-                            title = "Hírek ➜ Sűrgős";
-                            break;
                     }
                     break;
                 case "/szerkeszto":
@@ -48,7 +55,20 @@ function PageTitle() {
         else if (subSiteSliced.length == 3) {
             switch (subSiteSliced[1]) {
                 case "hirek":
-                    title = "Hírek ➜ Hír megtekintése"
+
+                    await axios.get(`http://localhost:3001/api/hirek/${subSiteSliced[2]}`)
+                        .then(response => {
+
+                            const hir = response.data;
+
+                            let cimEleje = hir.tipus == 'egyetemi' ? 'Egyetemi hírek' :
+                                hir.tipus == 'kari' ? 'Kari hírek' :
+                                    hir.tipus == 'pehok' ? 'PEHÖK hírek' :
+                                        hir.tipus == 'kollegiumi' ? 'Kollégiumi hírek' : 'Hírek';
+
+                            title = cimEleje + " ➜ " + hir.cim;
+                        })
+                        .catch(error => console.log(error));
                     break;
                 case "szerkeszto":
                     switch (subSiteSliced[2]) {
@@ -61,8 +81,8 @@ function PageTitle() {
         }
 
         setSiteTitle(title);
-
-    }, [window.location.pathname, window.location.search])
+        dispatch(setLoad(false));
+    }
 
     return (
         <span>{siteTitle}</span>

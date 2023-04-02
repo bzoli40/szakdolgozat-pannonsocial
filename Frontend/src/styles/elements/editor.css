@@ -19,3 +19,191 @@
     border: solid 1px #6b685d;
     color: #292206;
 }
+
+/*  - Új design -  */
+
+#editor-news-properties,
+#editor-linked-object {
+    margin: 20px;
+    padding: 10px;
+    padding-top: 5px;
+    background-color: var(--color-A-light-3);
+    color: var(--color-A-dark-2);
+    border: 1px solid var(--color-A-2);
+    font-size: 25px;
+    text-align: start;
+}
+
+#editor-news-properties .title-text,
+#editor-linked-object .title-text {
+    padding: 0;
+}
+
+.editor-prop-name {
+    background-color: var(--color-A-light-4);
+    color: var(--color-A-dark-2);
+    font-size: 20px;
+    border: 1px solid var(--color-A-2);
+    padding: 4px 30px;
+    width: max-content;
+    height: 40px;
+    border-radius: 20px 0 0 20px;
+}
+
+.editor-prop-mid {
+    background-color: var(--color-A-light-4);
+    color: var(--color-B-dark-1);
+    font-size: 20px;
+    border: 1px solid var(--color-A-2);
+    border-left: 0;
+    padding: 4px 15px;
+    width: max-content;
+    height: 40px;
+    text-align: center;
+}
+
+.editor-prop-input {
+    background-color: var(--color-A-light-2);
+    color: var(--color-B-dark-1);
+    font-size: 20px;
+    border: 1px solid var(--color-A-2);
+    border-left: 0;
+    padding: 0 15px;
+    width: min-content;
+    height: 40px;
+    border-radius: 0 20px 20px 0;
+    text-align: center;
+}
+
+input[type=text].editor-prop-input {
+    width: 450px
+}
+
+.editor-prop-input.file {
+    padding: 4px 25px 4px 20px;
+}
+
+.editor-prop-input.file>input {
+    width: 200px;
+    float: left;
+    font-size: 19px;
+    cursor: pointer;
+}
+
+.editor-prop-input.file>input::file-selector-button {
+    display: none;
+}
+
+.editor-prop-input.button {
+    width: 19px;
+    height: 19px;
+    padding: 0 0;
+    float: left;
+    background-color: var(--color-A-light-1);
+    border: 1px solid var(--color-A-2);
+    border-radius: 5px;
+    font-size: 5px;
+    cursor: pointer;
+    user-select: none;
+}
+
+.editor-prop-input.button.disabled {
+    background-color: var(--color-A-1);
+    pointer-events: none;
+}
+
+.editor-prop-button-content {
+    background-color: var(--color-B-light-2);
+    border: 1px solid var(--color-A-dark-1);
+    width: 13px;
+    height: 13px;
+    border-radius: 5px;
+    margin: 2px 0 0 2px;
+    visibility: hidden;
+}
+
+.editor-prop-input.button[data-on=true] .editor-prop-button-content {
+    visibility: visible;
+    pointer-events: none;
+}
+
+
+.editor-prop-input-holder {
+    background-color: var(--color-A-light-2);
+    color: var(--color-B-dark-1);
+    font-size: 20px;
+    border: 1px solid var(--color-A-2);
+    border-radius: 0 15px 15px 0;
+    border-left: 0;
+    height: 40px;
+    width: 50px;
+    padding: 10px 10px;
+}
+
+select.editor-prop-input {
+    cursor: pointer;
+    appearance: unset;
+    text-align: left;
+    text-align-last: center;
+}
+
+#editor-save {
+    margin: 20px auto;
+    background-color: var(--color-A-light-4);
+    border: 1px solid var(--color-A-2);
+    color: var(--color-A-dark-2);
+    font-size: 25px;
+    height: 40px;
+    border-radius: 20px;
+    padding: 0 30px;
+    width: min-content;
+}
+
+.editor-prop-duo {
+    width: min-content;
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
+.editor-prop-trio {
+    width: min-content;
+    display: grid;
+    grid-template-columns: auto auto auto;
+}
+
+.editor-props {
+    margin: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+}
+
+.editor-search-results {
+    margin: 20px;
+    font-size: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.editor-search-res {
+    background-color: var(--color-A-light-3);
+    border: 1px solid var(--color-A-2);
+    margin-bottom: 10px;
+    padding: 10px 20px;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+.editor-search-res.selected {
+    border: 1px solid var(--color-B-dark-1);
+    color: var(--color-B-dark-2);
+    font-weight: 500;
+    margin-bottom: 10px;
+    padding: 10px 20px;
+    border-radius: 50px;
+}
+
+#editor-container {
+    margin: 25px 20px;
+}

@@ -3,6 +3,7 @@ const cors = require('cors');
 
 const esemenyRoute = require('./routes/esemenyek')
 const felhasznaloRoute = require('./routes/felhasznalok')
+const hirekRoute = require('./routes/hirek')
 
 require('./database')
 
@@ -21,6 +22,7 @@ app.use((req, res, next) => {
 
 app.use('/api/esemenyek', esemenyRoute);
 app.use('/api/felhasznalok', felhasznaloRoute);
+app.use('/api/hirek', hirekRoute);
 
 app.listen(port, () => {
     console.log(`Listening on ${port}...`);

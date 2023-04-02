@@ -4,8 +4,27 @@ import { Editor } from '@tinymce/tinymce-react';
 import { blob } from 'stream/consumers';
 import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
 import { replaceHungarianCharsPlus } from '../../utils/UtilFunctions';
+import { useAppDispatch } from '../../store';
+import { setLoad } from '../../slices/loadingSlice';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
+import { showToast } from '../../slices/toastSlice';
+import { useNavigate } from 'react-router-dom';
+import { FormatPart } from '../../utils/DateFormatting';
 
 function NewsEditorPage() {
+
+    // teszt
+    const optionsT = [
+        { value: 'chocolate', label: 'Chocolate' },
+        { value: 'strawberry', label: 'Strawberry' },
+        { value: 'vanilla', label: 'Vanilla' }
+    ]
+
+    const dispatch = useAppDispatch();
+    const { userLogged } = useSelector((state: any) => state.authFire);
+
+    const navigate = useNavigate();
 
     const editorRef = useRef(null);
     const storage = getStorage();
@@ -20,10 +39,12 @@ function NewsEditorPage() {
         tags: [""],
         content: "",
         type: "",
-        isPublic: true
+        isPublic: true,
+        creator_officials: false,
     })
 
     const [listIcon, setListIcon] = useState();
+    const [userOfficials, setUserOfficials] = useState("");
 
     const [finalDoc, setFinalDoc] = useState({
         canBeSaved: false,
@@ -36,8 +57,33 @@ function NewsEditorPage() {
         tags: [""],
         content: "",
         type: "",
-        isPublic: true
+        isPublic: true,
+        creator_officials: false
     })
+
+    useEffect(() => {
+
+        if (userLogged.firebaseID === "" || !userLogged.permissions?.news_create) {
+
+            console.log("Nincs engedély, átirányítás")
+
+            navigate("/hiba");
+        }
+
+        getUserOfficials()
+    }, [userLogged])
+
+    const getUserOfficials = async () => {
+
+        if (userLogged.firebaseID !== "")
+            await axios.get(`http://localhost:3001/api/felhasznalok/firebase/${userLogged.firebaseID}`)
+                .then(response => {
+                    setUserOfficials(response.data.szervezet)
+                    console.log(response.data)
+                })
+                .catch(error => console.log(error));
+
+    }
 
     const log = () => {
         if (editorRef.current) {
@@ -81,7 +127,7 @@ function NewsEditorPage() {
 
     const changeDocParam = (event) => {
 
-        const id = (event.target.id).split('_')[2]
+        let id = (event.target.id).split('_')[2]
 
         if (id === "listIcon") {
             setListIcon(event.target.files[0])
@@ -93,9 +139,21 @@ function NewsEditorPage() {
             })
         }
         else if (id === "isPublic") {
+
+            //console.log(event.target.getAttribute('data-on'))
+
             setDoc({
                 ...doc,
-                [id]: event.target.checked,
+                isPublic: !doc.isPublic,
+            })
+        }
+        else if (id === "szervezet") {
+
+            //console.log(event.target.getAttribute('data-on'))
+
+            setDoc({
+                ...doc,
+                creator_officials: !doc.creator_officials,
             })
         }
         else {
@@ -121,13 +179,15 @@ function NewsEditorPage() {
         // Megakadályozzuk a form oldalresetjét
         event.preventDefault();
 
+        dispatch(setLoad(true));
+
         // Fájlok feltöltése és a képek src-jének felülírása automata
         await UploadFiles();
 
         // A content lekérése az editorból
         const contentT = await editorRef.current.getContent();
 
-        // Jelenlegi idő lekérése
+        // Jelenlegi idő lekérése - UPDATE 2023.03.31 > nem kell az idő, mert a backend automata hozzárendeli
         const currentTime = new Date();
 
         // Az egyedi ID létrehozása
@@ -165,8 +225,41 @@ function NewsEditorPage() {
         const docUpload = { ...finalDoc };
         delete docUpload.canBeSaved
 
-        // Feltöltés Firebase-re
-        const docUploaded = await addDoc(collection(db, "news"), docUpload)
+        const docUpload2 = {
+            hirID: finalDoc.creationID,
+            iro: userLogged.firebaseID,
+            iro_szervezete: finalDoc.creator_officials,
+            cim: finalDoc.title,
+            tipus: finalDoc.type,
+            tartalom: finalDoc.content,
+            listaKepURL: finalDoc.listIcon,
+            lathato: finalDoc.isPublic
+        }
+
+        // Feltöltés Firebase-re - UPDATE 2023.03.31 > MongoDB-re áttért a projekt
+
+        // const docUploaded = await addDoc(collection(db, "news"), docUpload)
+        let resp = {};
+
+        await axios.post('http://localhost:3001/api/hirek/',
+            {
+                hirID: finalDoc.creationID,
+                iro: userLogged.firebaseID,
+                iro_szervezete: finalDoc.creator_officials ? userOfficials : '',
+                cim: finalDoc.title,
+                tipus: finalDoc.type,
+                tartalom: finalDoc.content,
+                listaKepURL: finalDoc.listIcon,
+                lathato: finalDoc.isPublic,
+                hozzakotott_esemeny: eventLinked
+            })
+            .then(response => {
+
+                resp = { ...response.data }
+
+                dispatch(showToast({ type: "success", message: "Hír létrehozva!" }))
+            })
+            .catch(error => console.log(error));
 
         // save visszaállítása
         setFinalDoc({
@@ -174,96 +267,175 @@ function NewsEditorPage() {
             canBeSaved: false
         })
 
+        dispatch(setLoad(false));
+
         // Testing
-        console.log(docUploaded.id)
+        console.log(resp['_id'])
     }
+
+    // Esemény kapcsolása
+
+    const [eventsFound, setEventsFound] = useState([])
+    const [eventLinked, setEventLinked] = useState('')
+
+    const changeEventSearchInput = (event) => {
+
+        //console.log(event.target.value)
+
+        const searchSentence = event.target.value;
+
+        if (searchSentence.length >= 3) {
+
+            axios.get(`http://localhost:3001/api/esemenyek/szures-hirhez?kifejezes=${searchSentence}`)
+                .then(response => {
+
+                    const resp = response.data;
+
+                    let temp = [];
+
+                    resp.map(event => {
+
+                        const date = new Date(event.kezdes);
+                        const dateInto = `${date.getFullYear()}.${FormatPart(date.getMonth() + 1, 2, '0')}.${FormatPart(date.getDate() + 1, 2, '0')}`
+
+                        temp.push({
+                            ...event,
+                            kezdes: dateInto
+                        })
+                    })
+
+                    setEventsFound(temp);
+                })
+                .catch(error => console.log(error));
+
+        }
+        else {
+            if (eventsFound.length > 0)
+                setEventsFound([]);
+        }
+
+    };
+
+    useEffect(() => {
+        console.log(eventLinked)
+    }, [eventLinked])
+
+    useEffect(() => {
+        console.log(eventsFound)
+    }, [eventsFound])
+
 
     return (
         <form onSubmit={SaveData}>
-            <div className='row'>
-                <div className='col-lg-5 col-12'>
-                    <div className="input-group mt-3">
-                        <span className="input-group-text">Hír címe</span>
-                        <input type="text" className="form-control" id='editor_input_title' value={doc.title} onChange={changeDocParam} />
-                    </div>
+            <div id='editor-news-properties'>
+                <div className='title-text'>
+                    Hír tulajdonságai
                 </div>
-                <div className='col-lg-7' />
-
-                <div className='col-lg-3 col-12'>
-                    <div className="input-group my-4">
-                        <span className="input-group-text">Kategória</span>
-                        <select className="form-select" id="editor_input_type" value={doc.type} onChange={changeDocParam} >
-                            <option value="">Válasszon...</option>
+                <div className='editor-props'>
+                    <div className='editor-prop-duo'>
+                        <div className='editor-prop-name'>
+                            Cím
+                        </div>
+                        <input type="text" className="editor-prop-input" id='editor_input_title' value={doc.title} onChange={changeDocParam} />
+                    </div>
+                    <div className='editor-prop-duo'>
+                        <div className='editor-prop-name'>
+                            Kategória
+                        </div>
+                        <select className="editor-prop-input" id="editor_input_type" value={doc.type} onChange={changeDocParam} >
+                            <option value="" hidden>- kiválasztás -</option>
                             <option value="egyetemi">Egyetemi</option>
                             <option value="kari">Kari</option>
                             <option value="pehok">PEHÖK</option>
                             <option value="kollegiumi">Kollégiumi</option>
-                            <option value="surgos">Sűrgős</option>
                         </select>
                     </div>
-                </div>
-                <div className='col-lg-4 col-12'>
-                    <div className="input-group my-4">
-                        <span className="input-group-text">Tagek</span>
-                        <input type="text" className="form-control" id='editor_input_tags' placeholder='Egymás után, vesszővel elválasztva' value={doc.tags.join() + ""} onChange={changeDocParam} />
+                    <div className='editor-prop-duo'>
+                        <div className='editor-prop-name'>
+                            Listakép
+                        </div>
+                        <div className="editor-prop-input file">
+                            <input type="file" className="editor-prop-file" id="editor_input_listIcon" onChange={changeDocParam} />
+                        </div>
                     </div>
-                </div>
-                <div className='col-lg-5' />
-
-                <div className='col-12'>
-                    <div className="input-group mb-4">
-                        <span className="input-group-text">Publikus cikk?</span>
-                        <div className="input-group-text">
-                            <input className="form-check-input mt-0" type="checkbox" id='editor_input_isPublic' value={doc.isPublic.toString()} onChange={changeDocParam} />
+                    <div className='editor-prop-duo'>
+                        <div className='editor-prop-name'>
+                            Publikus
+                        </div>
+                        <div className="editor-prop-input-holder">
+                            <div className='editor-prop-input button' id='editor_input_isPublic' data-on={doc.isPublic.toString()} onClick={changeDocParam}>
+                                <div className='editor-prop-button-content' />
+                            </div>
+                        </div>
+                    </div>
+                    <div className='editor-prop-trio'>
+                        <div className='editor-prop-name'>
+                            Szervezet nevében
+                        </div>
+                        <div className='editor-prop-mid'>
+                            {userOfficials !== "" ? userOfficials : '- ✖ -'}
+                        </div>
+                        <div className="editor-prop-input-holder">
+                            <div className={'editor-prop-input button' + (userOfficials !== "" ? '' : ' disabled')} id='editor_input_szervezet' data-on={doc.creator_officials.toString()} onClick={changeDocParam}>
+                                <div className='editor-prop-button-content' />
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div className='col-12'>
-                    <Editor
-                        apiKey='2gfoqw1gq4jutyttjibxulkixb1byvkesojj3qu083oifcqf'
-                        onInit={(evt, editor) => editorRef.current = editor}
-                        initialValue=""
-                        init={{
-                            height: 500,
-                            menubar: true,
-                            language: 'hu_HU',
-                            entity_encoding: 'raw',
-                            automatic_uploads: false,
-                            images_upload_handler: BlobFileUploadHandler,
-                            plugins: [
-                                'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-                                'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                                'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount', 'autosave'
-                            ],
-                            toolbar: 'undo redo | blocks | ' +
-                                'bold italic forecolor | alignleft aligncenter ' +
-                                'alignright alignjustify | bullist numlist outdent indent | ' +
-                                'removeformat | help',
-                            content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-                            body_id: 'editorContent'
-                        }}
-                    />
-                </div>
-                {/* <div className='col-lg-4 col-12'>
-                    <div className="input-group my-4">
-                        <label className="input-group-text" htmlFor="editor_input_header_img">Fejléckép</label>
-                        <input type="file" className="form-control" id="editor_input_header_img" />
-                    </div>
-                </div> */}
-                <div className='col-lg-4 col-12'>
-                    <div className="input-group my-4">
-                        <label className="input-group-text" htmlFor="editor_input_listIcon">Listakép</label>
-                        <input type="file" className="form-control" id="editor_input_listIcon" onChange={changeDocParam} />
-                    </div>
-                </div>
-                <div className='col-lg-4' />
-                <div className='col-lg-12 col-12'>
-                    <button className="form-control editor-save-button" type='submit'>
-                        Mentés
-                    </button>
-                </div>
-
             </div>
+            <div id='editor-linked-object'>
+                <div className='title-text'>
+                    Kapcsolódó esemény
+                </div>
+                <div className='editor-props'>
+                    <div className='editor-prop-duo'>
+                        <div className='editor-prop-name'>
+                            Keresés esemény neve alapján
+                        </div>
+                        <input type="text" placeholder='Legalább 3 karaktert be kell írni a kereséshez' className="editor-prop-input" onChange={changeEventSearchInput} />
+                    </div>
+                </div>
+                <div className='editor-search-results'>
+                    {
+                        eventsFound.map(foundOne =>
+                            <div className={'editor-search-res' + (eventLinked === foundOne._id ? " selected" : "")} key={foundOne._id} onClick={() => {
+                                setEventLinked(foundOne._id)
+                            }}>
+                                {foundOne?.megnevezes} - {foundOne?.kezdes}
+                            </div>
+                        )
+                    }
+                </div>
+            </div>
+            <div id='editor-container'>
+                <Editor
+                    apiKey='2gfoqw1gq4jutyttjibxulkixb1byvkesojj3qu083oifcqf'
+                    onInit={(evt, editor) => editorRef.current = editor}
+                    initialValue=""
+                    init={{
+                        height: 500,
+                        menubar: true,
+                        language: 'hu_HU',
+                        entity_encoding: 'raw',
+                        automatic_uploads: false,
+                        images_upload_handler: BlobFileUploadHandler,
+                        plugins: [
+                            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                            'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                            'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount', 'autosave'
+                        ],
+                        toolbar: 'undo redo | blocks | ' +
+                            'bold italic forecolor | alignleft aligncenter ' +
+                            'alignright alignjustify | bullist numlist outdent indent | ' +
+                            'removeformat | help',
+                        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px; background-color: var(--color-A-light-3); }',
+                        body_id: 'editorContent'
+                    }}
+                />
+            </div>
+            <button className="form-control" id='editor-save' type='submit'>
+                Mentés
+            </button>
         </form>
     )
 }
