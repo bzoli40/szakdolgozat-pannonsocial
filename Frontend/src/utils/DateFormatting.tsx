@@ -26,7 +26,7 @@ export const FormatPart = (input, toCharLength, fillupChar) => {
 
 }
 
-const AreDaysSame = (dateA: Date, dateB: Date) => {
+export const AreDaysSame = (dateA: Date, dateB: Date) => {
     return dateA.getFullYear() === dateB.getFullYear()
         && dateA.getMonth() === dateB.getMonth()
         && dateA.getDate() === dateB.getDate();

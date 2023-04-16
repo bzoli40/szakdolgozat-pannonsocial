@@ -41,6 +41,11 @@ const HirSchema = new mongoose.Schema({
         type: mongoose.SchemaTypes.ObjectId,
         ref: 'esemeny'
     },
+    torolve: {
+        type: mongoose.SchemaTypes.Boolean,
+        required: true,
+        default: false
+    }
 }, { versionKey: false });
 
 module.exports = mongoose.model('hir', HirSchema, 'hirek')

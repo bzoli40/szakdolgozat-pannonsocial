@@ -9,6 +9,10 @@ const EsemenySchema = new mongoose.Schema({
         type: mongoose.SchemaTypes.String,
         required: true
     },
+    letrehozo: {
+        type: mongoose.SchemaTypes.String,
+        required: true
+    },
     leiras: {
         type: mongoose.SchemaTypes.String
     },
@@ -26,6 +30,11 @@ const EsemenySchema = new mongoose.Schema({
     oraKell: {
         type: mongoose.SchemaTypes.Boolean,
         required: true
+    },
+    torolve: {
+        type: mongoose.SchemaTypes.Boolean,
+        required: true,
+        default: false
     }
 }, { versionKey: false });
 

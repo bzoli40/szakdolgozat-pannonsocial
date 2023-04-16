@@ -1,8 +1,12 @@
 #news-holder {
     display: grid;
     grid-template-columns: min-content min-content min-content min-content min-content;
-    grid-gap: 20px;
-    padding: 40px;
+    grid-gap: 15px;
+    padding: 0px 40px 10px 40px;
+}
+
+#news-holder.more-padding {
+    padding-top: 40px
 }
 
 .events-holder {

@@ -29,7 +29,7 @@ function Sidebar() {
                     siteSelected = "fooldal"
                     break;
                 case "/hirek":
-                    switch (params.get("type")) {
+                    switch (params.get("tipus")) {
                         case "egyetemi":
                             siteSelected = "egyetemihir";
                             break;
@@ -49,6 +49,21 @@ function Sidebar() {
                     break;
                 case "/esemenyek":
                     siteSelected = "naptaresemeny"
+                    break;
+            }
+        }
+        else if (subSiteSliced.length == 3) {
+            console.log('HELLO:' + subSite)
+            switch (subSiteSliced[1]) {
+                case "szerkeszto":
+                    switch (subSiteSliced[2]) {
+                        case "hir":
+                            siteSelected = "hirszerkeszto"
+                            break;
+                        case "esemeny":
+                            siteSelected = "esemenyszerkeszto"
+                            break;
+                    }
                     break;
             }
         }
@@ -81,7 +96,7 @@ function Sidebar() {
                     </p>
                     <ul className='sidebar-menu-pages'>
                         <li>
-                            <Link to="/hirek?type=egyetemi">
+                            <Link to="/hirek?tipus=egyetemi">
                                 <button className={'sidebar-page-button ' + (currentSite === 'egyetemihir' ? 'selected' : '')}>
                                     Egyetemi
                                 </button>
@@ -89,21 +104,21 @@ function Sidebar() {
 
                         </li>
                         <li>
-                            <Link to="/hirek?type=kari">
+                            <Link to="/hirek?tipus=kari">
                                 <button className={'sidebar-page-button ' + (currentSite === 'karihir' ? 'selected' : '')}>
                                     Kari
                                 </button>
                             </Link>
                         </li>
                         <li>
-                            <Link to="/hirek?type=pehok">
+                            <Link to="/hirek?tipus=pehok">
                                 <button className={'sidebar-page-button ' + (currentSite === 'pehokhir' ? 'selected' : '')}>
                                     PEHÖK
                                 </button>
                             </Link>
                         </li>
                         <li>
-                            <Link to="/hirek?type=kollegiumi">
+                            <Link to="/hirek?tipus=kollegiumi">
                                 <button className={'sidebar-page-button ' + (currentSite === 'kolihir' ? 'selected' : '')}>
                                     Kollégiumi
                                 </button>
@@ -126,20 +141,46 @@ function Sidebar() {
                     </ul>
                 </div>
                 {
-                    userLogged.permissions?.news_create ?
+                    userLogged.permissions?.news_create || userLogged.permissions?.events_create ?
 
                         <div className='sidebar-category-panel'>
                             <p className='sidebar-menu-category'>
                                 Eszközök
                             </p>
                             <ul className='sidebar-menu-pages'>
-                                <li>
-                                    <Link to="/szerkeszto">
-                                        <button className={'sidebar-page-button ' + (currentSite === 'szerkeszto' ? 'selected' : '')}>
-                                            Szerkesztő
-                                        </button>
-                                    </Link>
-                                </li>
+                                {
+                                    userLogged.permissions?.news_create || userLogged.permissions?.events_create ?
+
+                                        <li>
+                                            <Link to="/szerkeszto">
+                                                <button className={'sidebar-page-button ' + (currentSite === 'szerkeszto' ? 'selected' : '')}>
+                                                    Szerkesztői felület
+                                                </button>
+                                            </Link>
+                                        </li> : []
+                                }
+                                {
+                                    /*userLogged.permissions?.news_create ?
+
+                                        <li>
+                                            <Link to="/szerkeszto/hir">
+                                                <button className={'sidebar-page-button ' + (currentSite === 'hirszerkeszto' ? 'selected' : '')}>
+                                                    Hírszerkesztő
+                                                </button>
+                                            </Link>
+                                        </li> : []*/
+                                }
+                                {
+                                    /*userLogged.permissions?.events_create ?
+
+                                        <li>
+                                            <Link to="/szerkeszto/esemeny">
+                                                <button className={'sidebar-page-button ' + (currentSite === 'esemenyszerkeszto' ? 'selected' : '')}>
+                                                    Eseményszerkesztő
+                                                </button>
+                                            </Link>
+                                        </li> : []*/
+                                }
                             </ul>
                         </div>
 

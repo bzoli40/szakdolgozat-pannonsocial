@@ -54,7 +54,10 @@
     width: calc(100% - 30px);
     margin: 5px 15px;
     padding: 10px 0;
-    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
 }
 
 

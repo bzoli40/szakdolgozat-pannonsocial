@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { solid, regular, brands } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { useAppDispatch } from '../store';
 import { useSelector } from 'react-redux';
-import { setCloseMsg, setCredentials, setFirebaseID, setLoggedIn, setLogin, setLogout, setPermissions, setRegisterEmailPassword, setUserDisplayName } from '../slices/authFireSlice';
+import { setCloseMsg, setCredentials, setFirebaseID, setInnitReadHappened, setLoggedIn, setLogin, setLogout, setPermissions, setRegisterEmailPassword, setUserDisplayName } from '../slices/authFireSlice';
 import { showToast } from '../slices/toastSlice';
 import axios from 'axios';
 import { setLoad } from '../slices/loadingSlice';
@@ -25,12 +25,15 @@ const firebaseConfig = {
 function FireBase() {
 
     const dispatch = useAppDispatch();
-    const { wantLogin, credentials, wantLogout, wantRegister } = useSelector((state: any) => state.authFire);
+    const { wantLogin, credentials, wantLogout, wantRegister, userLogged } = useSelector((state: any) => state.authFire);
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app)
 
     onAuthStateChanged(auth, (user) => {
+
+        dispatch(setInnitReadHappened(true))
+
         if (user) {
             dispatch(setLoggedIn(true))
             dispatch(setUserDisplayName(auth.currentUser.displayName))

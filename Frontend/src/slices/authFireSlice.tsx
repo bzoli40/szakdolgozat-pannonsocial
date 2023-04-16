@@ -4,7 +4,7 @@ import axios from "axios";
 export const authFireSlice = createSlice({
     name: 'authFire',
     initialState: {
-        //userLogged: { UserImpl: {} },
+        initReadHappened: false,
         wantLogin: false,
         wantRegister: false,
         wantPasswordReset: false,
@@ -24,6 +24,9 @@ export const authFireSlice = createSlice({
         msg_closeAuthPanel: false
     },
     reducers: {
+        setInnitReadHappened: (state, action) => {
+            state.initReadHappened = action.payload
+        },
         setCredentials: (state, action) => {
             state.credentials = action.payload
         },
@@ -60,5 +63,5 @@ export const authFireSlice = createSlice({
     }
 });
 
-export const { setLogin, setRegisterEmailPassword, setPasswordReset, setCredentials, setUserDisplayName, setLoggedIn, setCloseMsg, setLogout, setPermissions, setFirebaseID, setMongoID } = authFireSlice.actions;
+export const { setLogin, setRegisterEmailPassword, setPasswordReset, setCredentials, setUserDisplayName, setLoggedIn, setCloseMsg, setLogout, setPermissions, setFirebaseID, setMongoID, setInnitReadHappened } = authFireSlice.actions;
 export default authFireSlice.reducer;

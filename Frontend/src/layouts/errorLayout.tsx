@@ -13,7 +13,7 @@ function ErrorLayout() {
             <div id='content'>
                 <div id='page_content'>
                     <div className='centered'>
-                        Nincs jogosultságod az oldalhoz!
+                        404
                     </div>
                 </div>
             </div>

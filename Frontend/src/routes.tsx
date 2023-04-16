@@ -1,5 +1,7 @@
 import ErrorLayout from "./layouts/errorLayout"
 import MainLayout from "./layouts/mainLayout"
+import EditorInterfacePage from "./pages/editors/editorInterfacePage"
+import EventsEditorPage from "./pages/editors/eventsEditorPage"
 import NewsEditorPage from "./pages/editors/newsEditorPage"
 import EventsPage from "./pages/events/eventsPage"
 import StarterPage from "./pages/main/starterPage"
@@ -38,8 +40,11 @@ const routes = () => [
         path: 'szerkeszto/',
         element: <MainLayout />,
         children: [
-            { path: '', element: <NewsEditorPage /> },
-            { path: 'hir', element: <NewsEditorPage /> }
+            { path: '', element: <EditorInterfacePage /> },
+            { path: 'esemeny', element: <EventsEditorPage /> },
+            { path: 'esemeny/modositas', element: <EventsEditorPage /> },
+            { path: 'hir', element: <NewsEditorPage /> },
+            { path: 'hir/modositas', element: <NewsEditorPage /> }
         ]
     }
 ]

@@ -29,7 +29,7 @@ function PageTitle() {
                     title = "Főoldal"
                     break;
                 case "/hirek":
-                    switch (params.get("type")) {
+                    switch (params.get("tipus")) {
                         case "egyetemi":
                             title = "Hírek ➜ Egyetemi";
                             break;
@@ -43,12 +43,15 @@ function PageTitle() {
                             title = "Hírek ➜ Kollégiumi";
                             break;
                     }
-                    break;
-                case "/szerkeszto":
-                    title = "Szerkesztő ➜ Új hír létrehozása"
+                    if (params.get("esemeny") != null) {
+                        title = 'Hírek ➜ Eseményhez kapcsolódó'
+                    }
                     break;
                 case "/esemenyek":
                     title = "Események ➜ Naptár"
+                    break;
+                case "/szerkeszto":
+                    title = "Szerkesztői felület ➜ Opció választó"
                     break;
             }
         }
@@ -73,7 +76,24 @@ function PageTitle() {
                 case "szerkeszto":
                     switch (subSiteSliced[2]) {
                         case "hir":
-                            title = "Szerkesztő ➜ Hírszerkesztő"
+                            title = "Szerkesztő ➜ Új hír"
+                            break;
+                        case "esemeny":
+                            title = "Szerkesztő ➜ Új esemény"
+                            break;
+                    }
+                    break;
+            }
+        }
+        else if (subSiteSliced.length == 4) {
+            switch (subSiteSliced[1]) {
+                case "szerkeszto":
+                    switch (subSiteSliced[2] + "/" + subSiteSliced[3]) {
+                        case "hir/modositas":
+                            title = "Szerkesztő ➜ Hír módosítása"
+                            break;
+                        case "esemeny/modositas":
+                            title = "Szerkesztő ➜ Esemény módosítása"
                             break;
                     }
                     break;

@@ -4,9 +4,9 @@ import FireBase from '../../components/FireBase'
 function StarterPage() {
     return (
         <div>
-            <h1>
+            <div className='centered'>
                 Üdvözöljük az oldalon!
-            </h1>
+            </div>
         </div>
     )
 }

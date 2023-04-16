@@ -9,6 +9,7 @@ import { FormatForCard } from '../../utils/DateFormatting';
 import { useSelector } from 'react-redux';
 import { showToast } from '../../slices/toastSlice';
 import { useAppDispatch } from '../../store';
+import { Link } from 'react-router-dom';
 
 //import "../../styles/elements/EventCard";
 
@@ -164,8 +165,6 @@ const EventsPage = () => {
     const showEventDetails = (eventObj) => {
         setShowingEvent(eventObj)
 
-        console.log(eventObj.kezdes)
-
         setPanelVisible(true)
     }
 
@@ -215,6 +214,14 @@ const EventsPage = () => {
         }
     }
 
+    useEffect(() => {
+        const textdetail = document.getElementById('panel-text-detail');
+
+        if (textdetail != undefined) {
+            textdetail.innerHTML = showingEvent['leiras']
+        }
+    }, [showingEvent])
+
     return (
         <div>
             <div className='filter-holder'>
@@ -247,8 +254,7 @@ const EventsPage = () => {
                                         : []
                                 }
                             </p>
-                            <p className='panel-text-detail'>
-                                {showingEvent?.leiras}
+                            <p id='panel-text-detail' className='panel-text-detail'>
                             </p>
                             <div className='panel-bottom-divider'>
                                 {
@@ -262,6 +268,11 @@ const EventsPage = () => {
                                         </button>
                                         : []
                                 }
+                                <Link to={`/hirek?esemeny=${showingEvent._id}`}>
+                                    <button className='filter-button' onClick={() => { }}>
+                                        Hozzá kapcsolódó események
+                                    </button>
+                                </Link>
                             </div>
                         </div>
                     </div> : []

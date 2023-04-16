@@ -16,6 +16,68 @@ router.get('/', async (req, res) => {
 
 });
 
+router.get('/szures', async (req, res) => {
+
+    const { kifejezes, szerzo, megjelenes_tol, megjelenes_ig, tipus, esemeny } = req.query;
+
+    try {
+        let talalatok = []
+
+        let queryParams = {
+            cim: { $regex: new RegExp((kifejezes != undefined ? kifejezes : ''), 'i') },
+            iro_szervezete: { $regex: new RegExp((szerzo != undefined ? szerzo : ''), 'i') },
+            lathato: true,
+            torolve: false
+        }
+
+        if (esemeny != undefined)
+            queryParams = {
+                ...queryParams,
+                hozzakotott_esemeny: esemeny
+            }
+
+        if (tipus != undefined)
+            queryParams = {
+                ...queryParams,
+                tipus
+            }
+
+        if (megjelenes_tol != undefined)
+            queryParams = {
+                ...queryParams,
+                letrehozva: {
+                    $gte: megjelenes_tol,
+                    $lte: megjelenes_ig,
+                }
+            }
+
+        //console.log(queryParams)
+
+        talalatok = await Hirek.find(queryParams).sort({ letrehozva: -1 })
+
+        res.status(200).send(talalatok)
+    }
+    catch (error) {
+        res.send({ msg: error })
+    }
+
+});
+
+router.get('/adatbazis/:hirID/', async (req, res) => {
+
+    const { hirID } = req.params;
+
+    try {
+        const hir = await Hirek.findById(hirID);
+
+        res.status(200).send(hir)
+    }
+    catch (error) {
+        res.send({ msg: error })
+    }
+
+});
+
 router.get('/:hirID/', async (req, res) => {
 
     const { hirID } = req.params;
@@ -24,6 +86,21 @@ router.get('/:hirID/', async (req, res) => {
         const hir = await Hirek.findOne({ hirID: hirID });
 
         res.status(200).send(hir)
+    }
+    catch (error) {
+        res.send({ msg: error })
+    }
+
+});
+
+router.get('/felhasznaloi/:felhID/', async (req, res) => {
+
+    const { felhID } = req.params;
+
+    try {
+        const hirek_altala = await Hirek.find({ iro: felhID, torolve: false });
+
+        res.status(200).send(hirek_altala)
     }
     catch (error) {
         res.send({ msg: error })
@@ -49,7 +126,7 @@ router.post('/', async (req, res) => {
             tartalom,
             listaKepURL,
             lathato,
-            hozzakotott_esemeny
+            hozzakotott_esemeny: hozzakotott_esemeny != '' ? hozzakotott_esemeny : null
         })
 
         res.status(200).send(ujHir)
@@ -65,26 +142,24 @@ router.put('/:hirdbID/', async (req, res) => {
     // Ez nem a HTML-es hirID, ez az adatbázisos
     const { hirdbID } = req.params;
 
-    const { cim, tipus, tartalom, listaKepURL, lathato, iro_szervezete } = req.body;
+    const { hirID, iro_szervezete, cim, tipus, tartalom, listaKepURL, lathato, hozzakotott_esemeny } = req.body;
 
     try {
 
+        await Hirek.updateOne({ _id: hirdbID }, {
+            $set: {
+                hirID,
+                iro_szervezete,
+                cim,
+                tipus,
+                tartalom,
+                lathato,
+                listaKepURL: listaKepURL != '' ? listaKepURL : hirID,
+                hozzakotott_esemeny
+            }
+        });
+
         const hir = await Hirek.findById(hirdbID);
-
-        if (cim != undefined)
-            hir.cim = cim;
-        if (tipus != undefined)
-            hir.tipus = tipus;
-        if (tartalom != undefined)
-            hir.tartalom = tartalom;
-        if (listaKepURL != undefined)
-            hir.listaKepURL = listaKepURL;
-        if (lathato != undefined)
-            hir.lathato = lathato == 'true';
-        if (iro_szervezete != undefined)
-            hir.iro_szervezete = iro_szervezete;
-
-        await hir.save();
 
         res.status(200).send(hir)
     }
@@ -92,6 +167,35 @@ router.put('/:hirdbID/', async (req, res) => {
         res.send({ msg: error })
     }
 
+});
+
+router.delete('/:hirID', async (req, res) => {
+
+    const { hirID } = req.params;
+
+    try {
+        await Hirek.updateOne({ _id: hirID }, { $set: { torolve: true } });
+
+        res.status(200).send('Hír törölve!')
+    }
+    catch (error) {
+        res.send({ msg: error })
+    }
+
+});
+
+router.put('/up/torlesUpdate/', async (req, res) => {
+    try {
+        console.log('J');
+        await Hirek.updateMany({}, { $set: { torolve: false } });
+
+        console.log('J');
+
+        res.status(200).send('Hírek új mezője hozzáadva!')
+    }
+    catch (error) {
+        res.send({ msg: error })
+    }
 });
 
 module.exports = router
