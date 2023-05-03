@@ -27,7 +27,7 @@ const HirSchema = new mongoose.Schema({
     },
     tartalom: {
         type: mongoose.SchemaTypes.String,
-        required: true
+        default: ''
     },
     listaKepURL: {
         type: mongoose.SchemaTypes.String,

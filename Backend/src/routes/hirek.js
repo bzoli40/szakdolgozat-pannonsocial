@@ -114,6 +114,7 @@ router.post('/', async (req, res) => {
 
     try {
 
+        console.log(req.body);
         const most = new Date();
 
         const ujHir = await Hirek.create({
@@ -132,6 +133,7 @@ router.post('/', async (req, res) => {
         res.status(200).send(ujHir)
     }
     catch (error) {
+        console.log(error)
         res.send({ msg: error })
     }
 
@@ -146,6 +148,8 @@ router.put('/:hirdbID/', async (req, res) => {
 
     try {
 
+        const hirElotte = await Hirek.findById(hirdbID);
+
         await Hirek.updateOne({ _id: hirdbID }, {
             $set: {
                 hirID,
@@ -154,7 +158,7 @@ router.put('/:hirdbID/', async (req, res) => {
                 tipus,
                 tartalom,
                 lathato,
-                listaKepURL: listaKepURL != '' ? listaKepURL : hirID,
+                listaKepURL: listaKepURL != '' ? listaKepURL : hirElotte.listaKepURL,
                 hozzakotott_esemeny
             }
         });

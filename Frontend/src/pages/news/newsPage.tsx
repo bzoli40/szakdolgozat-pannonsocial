@@ -10,11 +10,11 @@ const NewsPage = () => {
     let params = new URLSearchParams(window.location.search);
 
     const [news, setNews] = useState([]);
-    const [APICallString, setAPICallString] = useState(`http://localhost:3001/api/hirek/szures?tipus=${params.get("tipus")}`);
+    const [APICallString, setAPICallString] = useState(``);
     const [APICallParams, setAPICallParams] = useState('');
 
     useEffect(() => {
-        if (params.get('esemeny') != null) {
+        if (params.get('tipus') == null) {
             setAPICallString(`http://localhost:3001/api/hirek/szures?esemeny=${params.get("esemeny")}`)
         }
         else {
@@ -23,7 +23,8 @@ const NewsPage = () => {
     }, [window.location.pathname, window.location.search])
 
     useEffect(() => {
-        getAllNews2(`${APICallString}${APICallParams}`);
+        if (APICallString !== '')
+            getAllNews2(`${APICallString}${APICallParams}`);
     }, [APICallString, APICallParams])
 
     const getAllNews2 = async (backendAPI: string) => {

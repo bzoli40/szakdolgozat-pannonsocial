@@ -144,6 +144,7 @@ function EventsEditorPage() {
 
                 resp = { ...response.data }
 
+                navigate('/szerkeszto')
                 dispatch(showToast({ type: "success", message: "Esemény létrehozva!" }))
             })
             .catch(error => console.log(error));
@@ -191,6 +192,7 @@ function EventsEditorPage() {
 
                 resp = { ...response.data }
 
+                navigate('/szerkeszto')
                 dispatch(showToast({ type: "success", message: "Esemény módosítva!" }))
             })
             .catch(error => console.log(error));
@@ -221,7 +223,7 @@ function EventsEditorPage() {
                                     <select className="editor-prop-input" id="editor_input_tipus" value={eventDoc.tipus} onChange={changeEventParams} >
                                         <option value="" hidden>- kiválasztás -</option>
                                         <option value="egyetemi">Egyetemi</option>
-                                        <option value="szorakozas">Szórakozas</option>
+                                        <option value="szorakozas">Szórakozás</option>
                                         <option value="szunet">Szünet</option>
                                         <option value="egyeb">Egyéb</option>
                                     </select>

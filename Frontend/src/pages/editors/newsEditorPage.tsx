@@ -303,6 +303,7 @@ function NewsEditorPage() {
                 hozzakotott_esemeny: eventLinked
             })
             .then(response => {
+                navigate('/szerkeszto')
                 dispatch(showToast({ type: "success", message: "Hír módosítva!" }))
             })
             .catch(error => console.log(error));
@@ -356,6 +357,7 @@ function NewsEditorPage() {
 
                 resp = { ...response.data }
 
+                navigate('/szerkeszto')
                 dispatch(showToast({ type: "success", message: "Hír létrehozva!" }))
             })
             .catch(error => console.log(error));
