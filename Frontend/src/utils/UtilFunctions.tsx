@@ -7,9 +7,6 @@ export const dynamicSort = (property: any) => {
         property = property.substr(1);
     }
     return function (a: any, b: any) {
-        /* next line works with strings and numbers, 
-         * and you may want to customize it to your needs
-         */
         var a_var = a[property].toString().toLowerCase();
         var b_var = b[property].toString().toLowerCase();
 
@@ -20,7 +17,6 @@ export const dynamicSort = (property: any) => {
 
 export const first: any = (arr: any, low: any, high: any, x: any, n: any) => {
     if (high >= low) {
-        // (low + high)/2;
         let mid = low + Math.floor((high - low) / 2);
 
         if ((mid === 0 || x > arr[mid - 1]) && arr[mid] === x)
@@ -33,9 +29,7 @@ export const first: any = (arr: any, low: any, high: any, x: any, n: any) => {
 }
 
 export const sortAccording = (A1: any, A2: any, m: any, n: any) => {
-    // The temp array is used to store a copy
-    // of A1[] and visited[] is used to mark the
-    // visited elements in temp[].
+
     let temp = [];
     let visited = [];
 
@@ -44,30 +38,24 @@ export const sortAccording = (A1: any, A2: any, m: any, n: any) => {
         visited[i] = 0;
     }
 
-    // Sort elements in temp
     temp.sort(function (a, b) { return a - b });
 
-    // for index of output which is sorted A1[]
     let ind = 0;
 
-    // Consider all elements of A2[], find them
-    // in temp[] and copy to A1[] in order.
     for (let i = 0; i < n; i++) {
-        // Find index of the first occurrence
-        // of A2[i] in temp
+
         let f = first(temp, 0, m - 1, A2[i], m);
-        // If not present, no need to proceed
+
         if (f === -1) {
             continue;
         }
-        // Copy all occurrences of A2[i] to A1[]
+
         for (let j = f; (j < m && temp[j] === A2[i]); j++) {
             A1[ind++] = temp[j];
             visited[j] = 1;
         }
     }
-    // Now copy all items of temp[] which are
-    // not present in A2[]
+
     for (let i = 0; i < m; i++) {
         if (visited[i] === 0)
             A1[ind++] = temp[i];
