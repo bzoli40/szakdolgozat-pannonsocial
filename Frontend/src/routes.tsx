@@ -33,7 +33,6 @@ const routes = () => [
         element: <MainLayout />,
         children: [
             { path: '', element: <EventsPage /> },
-            { path: ':esemenyID', element: <NewsInspectPage /> }
         ]
     },
     {
