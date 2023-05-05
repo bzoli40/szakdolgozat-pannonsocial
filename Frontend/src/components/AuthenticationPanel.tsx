@@ -91,7 +91,7 @@ function AuthenticationPanel({ closeEvent }) {
                                 </form>
                                 <div className='auth-panel-divider'>
                                     <p className='no-margin'>
-                                        Elfelejtett jelszó | <span className='clickable' onClick={() => { setMode("register") }}>Új fiók</span>
+                                        <span className='clickable' onClick={() => { setMode("register") }}>Új fiók</span>
                                     </p>
                                 </div>
                                 {/* <p>
