@@ -7,12 +7,9 @@ import pp_icon from './../images/icons/pe_social.png';
 import NotificationBell from './NotificationBell';
 import DarkModeSwitch from './DarkModeSwitch';
 import { useSelector } from 'react-redux';
-import { showToast } from '../slices/toastSlice';
-import { useAppDispatch } from '../store';
 
 function Sidebar() {
 
-    const dispatch = useAppDispatch();
     const { userLogged } = useSelector((state: any) => state.authFire);
 
     const [currentSite, setCurrentSite] = useState('');
@@ -135,11 +132,11 @@ function Sidebar() {
                     </p>
                     <ul className='sidebar-menu-pages'>
                         <li>
-                            <button className={'sidebar-page-button ' + (currentSite === 'naptaresemeny' ? 'selected' : '')} onClick={() => {
-                                dispatch(showToast({ type: "error", message: "Az oldal jelenleg nem elérhető" }))
-                            }}>
-                                Naptár
-                            </button>
+                            <Link to="/esemenyek">
+                                <button className={'sidebar-page-button ' + (currentSite === 'naptaresemeny' ? 'selected' : '')}>
+                                    Naptár
+                                </button>
+                            </Link>
                         </li>
                     </ul>
                 </div>
