@@ -1,11 +1,18 @@
 [data-theme='dark'] {
-    --color-btn-auth: rgb(186, 114, 204);
-    --color-btn-auth-hover: rgb(210, 144, 227);
+    --color-A-light-1: #827f7b;
+    --color-A-light-2: #84807d;
+    --color-A-light-3: #807971;
+    --color-A-light-4: #696663;
 
-    --color-darkmode-button: rgb(244, 244, 244);
-    --color-darkmode-hover: rgb(224, 208, 229);
-    --color-darkmode-icon: rgb(46, 43, 77);
+    --color-A-1: #32312e;
+    --color-A-2: #d4cbba;
 
-    --color-primal-button: rgb(211, 201, 228);
-    --color-primal-hover: rgb(236, 230, 247);
+    --color-A-dark-1: #e9e0d2;
+    --color-A-dark-2: #d2cac0;
+
+    --color-B-light-1: #A7AAD1;
+    --color-B-light-2: #B790D1;
+
+    --color-B-dark-1: #d0c3ff;
+    --color-B-dark-2: #d5b8f5;
 }

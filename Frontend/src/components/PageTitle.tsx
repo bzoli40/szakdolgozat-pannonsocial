@@ -42,6 +42,9 @@ function PageTitle() {
                         case "kollegiumi":
                             title = "Hírek ➜ Kollégiumi";
                             break;
+                        default:
+                            title = 'Hírek ➜ Mind'
+                            break;
                     }
                     if (params.get("esemeny") != null) {
                         title = 'Hírek ➜ Eseményhez kapcsolódó'

@@ -4,6 +4,10 @@
     --sidebar-width: 250px
 }
 
+body {
+    background-color: var(--color-A-light-1);
+}
+
 /* < Main Layout > */
 
 #sidebar {
@@ -89,6 +93,7 @@
     position: absolute;
     top: 0;
     left: var(--sidebar-width);
+    background-color: var(--color-A-light-1);
 }
 
 #content-full {

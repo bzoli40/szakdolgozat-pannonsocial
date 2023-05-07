@@ -14,7 +14,10 @@ const NewsPage = () => {
     const [APICallParams, setAPICallParams] = useState('');
 
     useEffect(() => {
-        if (params.get('tipus') == null) {
+        if (params.get('tipus') == null && params.get('esemeny') == null) {
+            setAPICallString(`http://localhost:3001/api/hirek/szures`)
+        }
+        else if (params.get('tipus') == null) {
             setAPICallString(`http://localhost:3001/api/hirek/szures?esemeny=${params.get("esemeny")}`)
         }
         else {
@@ -131,7 +134,7 @@ const NewsPage = () => {
                     : []
             }
 
-            <div id='news-holder' className={params.get("esemeny") !== null ? 'more-padding' : ''}>
+            <div id='news-holder' className={params.get("esemeny") !== null || (params.get('tipus') == null && params.get('esemeny') == null) ? 'more-padding' : ''}>
                 {
                     news.map((hir) => <NewsCard newsObj={hir} key={hir._id} />)
                 }

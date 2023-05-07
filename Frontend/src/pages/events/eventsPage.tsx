@@ -215,12 +215,18 @@ const EventsPage = () => {
     }
 
     useEffect(() => {
+
+        if (!panelVisible) return;
+
+        console.log(showingEvent);
+
         const textdetail = document.getElementById('panel-text-detail');
 
         if (textdetail != undefined) {
             textdetail.innerHTML = showingEvent['leiras']
         }
-    }, [showingEvent])
+
+    }, [panelVisible])
 
     return (
         <div>
@@ -270,7 +276,7 @@ const EventsPage = () => {
                                 }
                                 <Link to={`/hirek?esemeny=${showingEvent._id}`}>
                                     <button className='filter-button' onClick={() => { }}>
-                                        Hozzá kapcsolódó események
+                                        Hozzá kapcsolódó hírek
                                     </button>
                                 </Link>
                             </div>

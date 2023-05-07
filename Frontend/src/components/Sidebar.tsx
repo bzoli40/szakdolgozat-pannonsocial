@@ -187,8 +187,8 @@ function Sidebar() {
                         : []
                 }
             </div>
-            {/* <NotificationBell />
-            <DarkModeSwitch /> */}
+            {/* <NotificationBell /> */}
+            <DarkModeSwitch />
         </div>
     )
 }

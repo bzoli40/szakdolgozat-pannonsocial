@@ -27,9 +27,9 @@ export const FormatPart = (input, toCharLength, fillupChar) => {
 }
 
 export const AreDaysSame = (dateA: Date, dateB: Date) => {
-    return dateA.getFullYear() === dateB.getFullYear()
+    return (dateA.getFullYear() === dateB.getFullYear()
         && dateA.getMonth() === dateB.getMonth()
-        && dateA.getDate() === dateB.getDate();
+        && dateA.getDate() === dateB.getDate()) || dateB.getFullYear() === 1970;
 }
 
 const FormatWithCurrentDate = (date: Date, needDay: boolean, currentDate: Date, needHour: boolean) => {
