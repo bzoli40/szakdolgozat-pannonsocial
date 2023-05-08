@@ -6,7 +6,7 @@ const Hirek = require('../database/schemas/Hir');
 router.get('/', async (req, res) => {
 
     try {
-        const hirek_lista = await Hirek.find();
+        const hirek_lista = await Hirek.find({ torolve: false, lathato: true });
 
         res.status(200).send(hirek_lista)
     }
@@ -188,18 +188,18 @@ router.delete('/:hirID', async (req, res) => {
 
 });
 
-router.put('/up/torlesUpdate/', async (req, res) => {
-    try {
-        console.log('J');
-        await Hirek.updateMany({}, { $set: { torolve: false } });
+// router.put('/up/torlesUpdate/', async (req, res) => {
+//     try {
+//         console.log('J');
+//         await Hirek.updateMany({}, { $set: { torolve: false } });
 
-        console.log('J');
+//         console.log('J');
 
-        res.status(200).send('Hírek új mezője hozzáadva!')
-    }
-    catch (error) {
-        res.send({ msg: error })
-    }
-});
+//         res.status(200).send('Hírek új mezője hozzáadva!')
+//     }
+//     catch (error) {
+//         res.send({ msg: error })
+//     }
+// });
 
 module.exports = router

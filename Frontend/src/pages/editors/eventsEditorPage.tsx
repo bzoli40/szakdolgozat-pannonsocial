@@ -203,7 +203,7 @@ function EventsEditorPage() {
     return (
         <div>
             {
-                userLogged.permissions?.events_create ?
+                userLogged.permissions?.events_create || (subSite === '/szerkeszto/esemeny/modositas' && userLogged.permissions?.events_edit) ?
                     <form onSubmit={subSite === '/szerkeszto/esemeny/modositas' && params.get('id') !== null ? UpdateData : SaveData}>
                         <div id='editor-news-properties'>
                             <div className='title-text'>

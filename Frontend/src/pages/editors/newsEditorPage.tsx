@@ -423,7 +423,7 @@ function NewsEditorPage() {
     return (
         <div>
             {
-                userLogged.permissions?.news_create ?
+                userLogged.permissions?.news_create || (subSite === '/szerkeszto/hir/modositas' && userLogged.permissions?.news_edit) ?
                     <form onSubmit={subSite === '/szerkeszto/hir/modositas' && params.get('id') !== null ? UpdateData : SaveData}>
                         <div id='editor-news-properties'>
                             <div className='title-text'>

@@ -6,7 +6,7 @@ const Felhasznalok = require('../database/schemas/Felhasznalo');
 router.get('/', async (req, res) => {
 
     try {
-        const felh_lista = await Felhasznalok.find();
+        const felh_lista = await Felhasznalok.find({ torolt: false });
 
         res.status(200).send(felh_lista)
     }

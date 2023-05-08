@@ -7,7 +7,7 @@ const Felhasznalok = require('../database/schemas/Felhasznalo');
 router.get('/', async (req, res) => {
 
     try {
-        const esemeny_lista = await Esemenyek.find();
+        const esemeny_lista = await Esemenyek.find({ torolve: false });
 
         res.status(200).send(esemeny_lista)
     }
@@ -62,7 +62,7 @@ router.get('/szures-hirhez', async (req, res) => {
     const { kifejezes } = req.query;
 
     try {
-        const talalatok = await Esemenyek.find({ megnevezes: { $regex: new RegExp(kifejezes, 'i') } }).select('megnevezes kezdes')
+        const talalatok = await Esemenyek.find({ megnevezes: { $regex: new RegExp(kifejezes, 'i') }, torolve: false }).select('megnevezes kezdes')
         res.status(200).send(talalatok)
     }
     catch (error) {
@@ -165,15 +165,15 @@ router.delete('/:esemenyID', async (req, res) => {
 
 });
 
-router.put('/torlesUpdate', async (req, res) => {
-    try {
-        await Esemenyek.updateMany({}, { $set: { torolve: false } });
+// router.put('/torlesUpdate', async (req, res) => {
+//     try {
+//         await Esemenyek.updateMany({}, { $set: { torolve: false } });
 
-        res.status(200).send('Események új mezője hozzáadva!')
-    }
-    catch (error) {
-        res.send({ msg: error })
-    }
-});
+//         res.status(200).send('Események új mezője hozzáadva!')
+//     }
+//     catch (error) {
+//         res.send({ msg: error })
+//     }
+// });
 
 module.exports = router

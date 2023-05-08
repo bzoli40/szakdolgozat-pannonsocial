@@ -105,7 +105,7 @@ function EditorInterfacePage() {
                     {event['megnevezes']}
                 </span>
                 {
-                    userLogged.permissions?.news_edit ?
+                    userLogged.permissions?.events_edit ?
                         <Link to={`/szerkeszto/esemeny/modositas?id=${event['_id']}`}>
                             <button title='Esemény módosítása'>
                                 Μ
@@ -114,7 +114,7 @@ function EditorInterfacePage() {
                         : []
                 }
                 {
-                    userLogged.permissions?.news_delete ?
+                    userLogged.permissions?.events_delete ?
                         <button title='Esemény törlése' onClick={() => { deleteDoc(event['_id'], 1) }}>
                             ✖
                         </button>
